@@ -12,15 +12,15 @@ export default function Header() {
       const response = await fetch("/api/auth/logout", { method: "POST" });
 
       if (response.ok) {
-        const data = response.json();
-        console.log(data)
+        const data = await response.json();
+        console.log('[Auth] User logged out successfully');
         setUser(null);
         router.push("/login");
       } else {
-        console.log("response logout error", response);
+        console.error('[Auth] Logout failed:', response.status, response.statusText);
       }
     } catch (error) {
-      console.log("logout catch error", error);
+      console.error('[Auth] Logout error:', error.message);
     }
   };
   return (

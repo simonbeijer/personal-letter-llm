@@ -21,7 +21,7 @@ export default function Dropdown({ user, logoutUser }) {
         <UserCircleIcon className="h-8 w-8"></UserCircleIcon>
       </button>
       <div
-        className={`transition-all duration-500 transform absolute right-0 mt-2 p-4 border rounded-md shadow-md text-right bg-background text-foreground ${
+        className={`transition-all duration-500 transform absolute right-0 mt-2 p-4 border rounded-md shadow-md text-right bg-surface text-foreground border-border ${
           isOpen
             ? "opacity-100 scale-100"
             : "opacity-0 scale-95 pointer-events-none"

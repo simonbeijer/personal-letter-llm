@@ -7,7 +7,6 @@ import InputField from "@/app/components/inputField";
 import CustomButton from "@/app/components/button";
 
 export default function Login() {
-  const [test, setTest] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,7 +17,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(email, password);
+    console.log('[Auth] Login attempt for:', email);
 
     if (!email.match(/^\S+@\S+\.\S+$/)) {
       setLoading(false);
@@ -41,15 +40,15 @@ export default function Login() {
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
-        console.log("LOGIN REPONSE", response);
+        console.log('[Auth] Login successful for user:', data.user.email);
         router.push("/dashboard");
       } else {
         setError(true);
-        console.log("error login");
+        console.error('[Auth] Login failed:', response.status, response.statusText);
       }
     } catch (error) {
       setError(true);
-      console.error(error);
+      console.error('[Auth] Login error:', error.message);
     } finally {
       setLoading(false);
     }

@@ -14,14 +14,14 @@ export const UserProvider = ({ children }) => {
       });
 
       if (response.ok) {
-        console.log("response OK userContext", response);
-        const data = await response.json()
-        setUser(data.user)
-      } else {
-        console.log("response ERROR userContext", response);
+        const data = await response.json();
+        setUser(data.user);
+        console.log('[Context] User loaded:', data.user.email);
+      } else if (response.status !== 401) {
+        console.error('[Context] Failed to fetch user:', response.status, response.statusText);
       }
     } catch (error) {
-      console.log(error);
+      console.error('[Context] User fetch error:', error.message);
     }
   };
 

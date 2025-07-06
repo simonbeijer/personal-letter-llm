@@ -5,7 +5,7 @@ export async function middleware(request) {
     const token = request.cookies.get("token")?.value;
     const { pathname } = request.nextUrl;
 
-    console.log("Middleware running on:", pathname);
+    console.log('[Middleware] Processing request for:', pathname);
 
     if (pathname === "/") {
         return NextResponse.next();
@@ -17,7 +17,7 @@ export async function middleware(request) {
                 await verifyAuth(token);
                 return NextResponse.redirect(new URL("/dashboard", request.url));
             } catch (error) {
-                console.log("Invalid token:", error.message);
+                console.log('[Middleware] Invalid token on login page:', error.message);
             }
         }
         return NextResponse.next();
@@ -31,7 +31,7 @@ export async function middleware(request) {
         await verifyAuth(token);
         return NextResponse.next();
     } catch (error) {
-        console.log("Invalid token:", error.message);
+        console.log('[Middleware] Invalid token, redirecting to login:', error.message);
         return NextResponse.redirect(new URL("/login", request.url));
     }
 }

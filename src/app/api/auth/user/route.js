@@ -19,9 +19,9 @@ export async function GET() {
     );
     return NextResponse.json({ user: payload }, { status: 200 });
   } catch (error) {
-    console.log("Error auth user ", error);
+    console.error('[Auth] Token verification failed:', error.message);
     return NextResponse.json(
-      { user: null, massage: "Invalid token" },
+      { user: null, message: "Invalid token" },
       { status: 401 }
     );
   }
