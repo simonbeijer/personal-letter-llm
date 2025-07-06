@@ -24,13 +24,26 @@ export default function Header() {
     }
   };
   return (
-    <header className="relative flex justify-between items-center h-12 px-4">
-      <div />
-      <nav className="absolute left-1/2 transform -translate-x-1/2">
-        My navbar
-      </nav>
-      <div>
-          <Dropdown logoutUser={logoutUser} user={user} />
+    <header className="bg-surface border-b border-border shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex items-center">
+            <h1 className="text-xl font-bold text-foreground">
+              Personal Letter LLM
+            </h1>
+          </div>
+          <nav className="hidden md:flex items-center space-x-8">
+            <a href="/dashboard" className="text-foreground hover:text-primary transition-colors">
+              Dashboard
+            </a>
+            <a href="/generate" className="text-foreground hover:text-primary transition-colors">
+              Generate Letter
+            </a>
+          </nav>
+          <div>
+            <Dropdown logoutUser={logoutUser} user={user} />
+          </div>
+        </div>
       </div>
     </header>
   );

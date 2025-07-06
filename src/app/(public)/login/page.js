@@ -56,47 +56,65 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen flex-col">
-      {loading}
-      <form
-        onSubmit={handleSubmit}
-        className="text-foreground flex items-center justify-center flex-col"
-      >
-        {loading ? (
-          <div className="h-[168px]">
-            <Spinner />
-          </div>
-        ) : (
-          <div className="flex items-center justify-center flex-col">
-            <InputField
-              name="email"
-              type="email"
-              value={email}
-              onChange={setEmail}
-              placeholder="Enter email"
-              error={error}
-              label="Email:"
+    <div className="flex items-center justify-center min-h-screen bg-background">
+      <div className="w-full max-w-md p-8">
+        <div className="bg-surface rounded-lg shadow-lg p-8">
+          <h1 className="text-2xl font-bold text-center text-foreground mb-6">
+            Personal Letter LLM
+          </h1>
+          <p className="text-center text-grey mb-8">
+            Sign in to generate personalized cover letters
+          </p>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {loading ? (
+              <div className="flex justify-center py-8">
+                <Spinner />
+              </div>
+            ) : (
+              <>
+                <InputField
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={setEmail}
+                  placeholder="Enter your email"
+                  error={error && !email}
+                  label="Email"
+                  required
+                />
+                <InputField
+                  name="password"
+                  type="password"
+                  value={password}
+                  onChange={setPassword}
+                  placeholder="Enter your password"
+                  error={error && !password}
+                  label="Password"
+                  required
+                />
+                {error && (
+                  <p className="text-red-500 text-sm text-center">
+                    Login failed. Please check your email and password.
+                  </p>
+                )}
+              </>
+            )}
+            <CustomButton 
+              callBack={handleSubmit} 
+              text={loading ? "Signing in..." : "Sign In"} 
+              disabled={loading} 
+              type="submit"
+              variant="primary"
+              size="lg"
             />
-            <InputField
-              name="password"
-              type="password"
-              value={password}
-              onChange={setPassword}
-              placeholder="Enter password"
-              error={error}
-              label="Password:"
-            />
-            <p
-              className={`text-red-400 mb-4 ${
-                error ? "visable" : "invisible"
-              } `}
-            >
-              Login failed. Please check your email and password.
-            </p>
+          </form>
+          
+          <div className="mt-6 text-center text-sm text-grey">
+            Test credentials: user@example.com / password123
           </div>
-        )}
-        <CustomButton callBack={handleSubmit} text="LOGIN" disabled={loading} type="submit"></CustomButton>
-      </form>
+        </div>
+      </div>
     </div>
   );
 }
