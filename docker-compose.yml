@@ -1,0 +1,32 @@
+services:
+  nextjs:
+    container_name: personal-letter-llm
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - DATABASE_URL=postgresql://simon:S1m0n@postgres:5432/basicdb
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    depends_on:
+      - postgres
+    command: ["npm", "run", "dev"]
+
+  postgres:
+    image: postgres:15
+    container_name: personal-letter-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: simon
+      POSTGRES_PASSWORD: S1m0n
+      POSTGRES_DB: basicdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - personal_letter_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  personal_letter_postgres_data:
