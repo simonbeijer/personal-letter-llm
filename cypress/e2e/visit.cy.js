@@ -3,7 +3,7 @@ describe('Home Page', () => {
     cy.visit('/');
     cy.contains('Login').should('be.visible').click();
     cy.url().should('include', '/login');
-    cy.get('nav').should('exist');
-    cy.get('nav').should('contain', 'My navbar logged out');
+    cy.contains('Personal Letter LLM').should('be.visible');
+    cy.contains('Sign in to generate personalized cover letters').should('be.visible');
   });
 });

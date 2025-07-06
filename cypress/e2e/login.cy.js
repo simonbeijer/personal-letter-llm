@@ -11,6 +11,6 @@ describe('Home and Login Flow', () => {
     cy.get('button[type="submit"]').click();
 
     cy.url().should('include', '/dashboard');
-    cy.contains('Dashboard');
+    cy.contains('Personal Letter LLM');
   });
 });
