@@ -55,17 +55,24 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
-      <div className="w-full max-w-md p-8">
-        <div className="bg-surface rounded-lg shadow-lg p-8">
-          <h1 className="text-2xl font-bold text-center text-foreground mb-6">
-            Personal Letter LLM
-          </h1>
-          <p className="text-center text-grey mb-8">
-            Sign in to generate personalized cover letters
-          </p>
+    <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4">
+      <div className="w-full max-w-xs">
+        <div className="bg-surface/95 backdrop-blur-sm rounded-2xl shadow-sm p-6 border border-white/10">
+          <div className="text-center mb-6">
+            <div className="w-12 h-12 bg-primary rounded-full mx-auto mb-3 flex items-center justify-center">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h1 className="text-xl font-bold text-foreground dark:text-white mb-1">
+              Personal Letter LLM
+            </h1>
+            <p className="text-grey dark:text-white/80 text-sm">
+              Sign in to generate personalized cover letters
+            </p>
+          </div>
           
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {loading ? (
               <div className="flex justify-center py-8">
                 <Spinner />
@@ -93,24 +100,32 @@ export default function Login() {
                   required
                 />
                 {error && (
-                  <p className="text-red-500 text-sm text-center">
+                  <p className="text-error text-sm text-center">
                     Login failed. Please check your email and password.
                   </p>
                 )}
               </>
             )}
-            <CustomButton 
-              callBack={handleSubmit} 
-              text={loading ? "Signing in..." : "Sign In"} 
-              disabled={loading} 
-              type="submit"
-              variant="primary"
-              size="lg"
-            />
+            <div className="pt-1">
+              <CustomButton 
+                callBack={handleSubmit} 
+                text={loading ? "Signing in..." : "Sign In"} 
+                disabled={loading} 
+                type="submit"
+                variant="primary"
+                size="lg"
+              />
+            </div>
           </form>
           
-          <div className="mt-6 text-center text-sm text-grey">
-            Test credentials: user@example.com / password123
+          <div className="mt-5 pt-4 border-t border-border/30 dark:border-white/20">
+            <div className="text-center text-xs text-grey dark:text-white/60 mb-3">
+              Test credentials: user@example.com / password123
+            </div>
+            <div className="flex items-center justify-center text-xs text-grey dark:text-white/60">
+              <span className="mr-1">🔒</span>
+              <span>Forgot password?</span>
+            </div>
           </div>
         </div>
       </div>
