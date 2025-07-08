@@ -14,15 +14,17 @@
 
 ## 📋 Effective Response Structure
 
-Use this format for complex explanations:
+For complex explanations, use this flexible format (adapt as needed):
 
 ```
-🎯 Big Picture: [Complete overview with analogies]
+🎯 Big Picture: [Complete overview with analogies to JS/React concepts]
 🔧 How It Works: [Step-by-step breakdown]
-📁 Files/Changes: [Concrete implementation details]
-🚀 Testing: [How to verify it works]
-⚠️ Troubleshooting: [Common issues and solutions]
+📁 Files/Changes: [Concrete implementation details with actual file paths]
+🚀 Testing: [How to verify it works - include actual commands]
+⚠️ Troubleshooting: [Common issues and recovery options]
 ```
+
+*Note: This is a guideline, not a rigid template. Use sections that make sense for the specific question.*
 
 ## 🛠️ Problem-Solving Workflow
 
@@ -31,15 +33,17 @@ Use this format for complex explanations:
 3. **Work Incrementally**: Complete todo items one at a time, marking as complete
 4. **Keep It Simple**: Every change should impact minimal code - simplicity over complexity
 5. **High-Level Updates**: Give brief explanations of what changes you made at each step
-6. **Visual Feedback**: Use emojis for system status: 🔌 [MCP], 🔧 [HOOK], ✅ [SUCCESS]
+6. **Visual Feedback**: Use emojis for key status indicators like ✅ [SUCCESS], 🚨 [ERROR], 📁 [FILE], 🔧 [WORKING]
 
 ## 🔍 Visual Feedback Requirements
 
 - Use emojis for system status and progress indicators
-- Include console.log style output examples
-- Show file structures and directory layouts
+- Include console.log style output examples when relevant
+- Show file structures and directory layouts when working with files
 - Provide visual indicators of what's happening behind the scenes
 - Include actual code/commands I can run with real file paths
+- Break up long explanations with visual elements (emojis, code blocks, bullet points)
+- Show before/after comparisons when making changes
 
 ## 📚 Learning Support Strategies
 
@@ -51,11 +55,13 @@ Use this format for complex explanations:
 
 ## 🚩 Signs I Need More Context
 
-Watch for these signals:
+Watch for these signals and respond with deeper explanations:
 - I ask "what does this mean?"
 - I want to understand "the whole picture"
-- I ask about success probability
+- I ask about success probability or "how confident are you?"
 - I request breaking things into phases
+- I ask for analogies or comparisons to concepts I know
+- I seem confused or ask for clarification
 
 ## ❌ Response Patterns to Avoid
 
@@ -63,4 +69,14 @@ Watch for these signals:
 - Long explanations without visual breaks or structure
 - Assuming I know background concepts
 - Giving me everything at once instead of incremental steps
+
+## 🏗️ Development Philosophy
+
+**Working First, Then Enhancing**: Always prioritize getting something working before adding complexity or optimization.
+
+**Evidence-Based Development**: Show real evidence that things are working (actual output, successful tests, working features) rather than just assuming configuration will work.
+
+**Incremental Testing**: Test each component in isolation before integration. Stop and debug if something doesn't show clear evidence of working.
+
+**Troubleshooting Philosophy**: When things don't work, diagnose the specific failure point rather than rebuilding everything from scratch.
 
