@@ -173,7 +173,7 @@ export default function Dashboard() {
                   </div>
                   <div className="bg-muted rounded-xl p-3 flex-1">
                     <p className="text-sm text-foreground">
-                      👋 Hello! I'm ready to help you create the perfect cover
+                      👋 Hello! I&apos;m ready to help you create the perfect cover
                       letter. Upload your CV and job description to get started!
                     </p>
                   </div>
