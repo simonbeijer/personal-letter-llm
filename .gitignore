@@ -11,6 +11,10 @@
 !.yarn/versions
 
 # LLM
+.claude
+/.claude
+/.claude/
+/.claude/*
 CLAUDE.md
 
 # testing
