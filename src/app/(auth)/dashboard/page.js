@@ -12,87 +12,181 @@ export default function Dashboard() {
   };
 
   const [displayModal, setDisplayModal] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [gdprAccepted, setGdprAccepted] = useState(false);
 
   useEffect(() => {
-    setDisplayModal(true);
+    // Check if user has already accepted terms
+    const hasAcceptedTerms = localStorage.getItem('personal-letter-llm-terms-accepted');
+    if (!hasAcceptedTerms) {
+      setDisplayModal(true);
+    }
   }, []);
 
   const handleCloseModal = () => {
     setDisplayModal(false);
   };
 
+  const handleAcceptTerms = () => {
+    if (termsAccepted && gdprAccepted) {
+      localStorage.setItem('personal-letter-llm-terms-accepted', new Date().toISOString());
+      setDisplayModal(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      <Modal isOpen={displayModal} onClose={handleCloseModal}>
-        <div className="flex flex-row space-x-4 bg-background">
-          <div className="flex-1 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-xl p-4 border border-purple-200/20">
-            <div className="w-8 h-8 bg-gradient-secondary rounded-lg flex items-center justify-center mb-3">
-              <svg
-                className="w-4 h-4 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                />
-              </svg>
+      <Modal isOpen={displayModal} onClose={handleCloseModal} showClose={false}>
+        <div className="max-w-4xl mx-auto space-y-6">
+          {/* Terms and Disclaimer Section */}
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-foreground mb-4">Terms of Use & Privacy Notice</h2>
+            
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4">
+              <div className="flex items-start space-x-3">
+                <svg className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.996-.833-2.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+                <div className="text-sm text-left">
+                  <p className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">Important Disclaimer</p>
+                  <p className="text-yellow-700 dark:text-yellow-300">
+                    This application uses AI technology to generate cover letters. Use at your own risk. 
+                    We bear no responsibility for the content generated, job application outcomes, or any consequences 
+                    arising from the use of this service. Always review and customize generated content before use.
+                  </p>
+                </div>
+              </div>
             </div>
-            <h3 className="font-semibold text-foreground mb-2">
-              Smart Generation
-            </h3>
-            <p className="text-sm text-grey">
-              AI analyzes your CV and job requirements
-            </p>
+
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+              <div className="flex items-start space-x-3">
+                <svg className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div className="text-sm text-left">
+                  <p className="font-semibold text-blue-800 dark:text-blue-200 mb-2">AI Technology Notice</p>
+                  <p className="text-blue-700 dark:text-blue-300">
+                    This service is powered by Google's Gemini AI. Your uploaded documents and generated content 
+                    may be processed by Google's systems according to their privacy policies. 
+                    Please avoid uploading sensitive personal information.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="flex-1 bg-gradient-to-br from-green-500/10 to-teal-500/10 rounded-xl p-4 border border-green-200/20">
-            <div className="w-8 h-8 bg-gradient-accent rounded-lg flex items-center justify-center mb-3">
-              <svg
-                className="w-4 h-4 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-            </div>
-            <h3 className="font-semibold text-foreground mb-2">
-              Perfect Match
-            </h3>
-            <p className="text-sm text-grey">
-              Intelligent skill and experience matching
-            </p>
+          {/* Consent Checkboxes */}
+          <div className="space-y-4 mb-6">
+            <label className="flex items-start space-x-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                className="mt-1 w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              />
+              <span className="text-sm text-foreground">
+                I agree to the Terms of Service and acknowledge that this is an experimental AI tool. 
+                I understand the limitations and disclaimers stated above.
+              </span>
+            </label>
+
+            <label className="flex items-start space-x-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={gdprAccepted}
+                onChange={(e) => setGdprAccepted(e.target.checked)}
+                className="mt-1 w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              />
+              <span className="text-sm text-foreground">
+                I consent to the processing of my data as described above and understand that my documents 
+                will be processed by AI systems for the purpose of generating cover letters.
+              </span>
+            </label>
           </div>
 
-          <div className="flex-1 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-xl p-4 border border-orange-200/20">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center mb-3">
-              <svg
-                className="w-4 h-4 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                />
-              </svg>
+          {/* Feature Boxes */}
+          <div className="flex flex-row space-x-4 bg-background mb-6">
+            <div className="flex-1 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-xl p-4 border border-purple-200/20">
+              <div className="w-8 h-8 bg-gradient-secondary rounded-lg flex items-center justify-center mb-3">
+                <svg
+                  className="w-4 h-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">
+                Smart Generation
+              </h3>
+              <p className="text-sm text-grey">
+                AI analyzes your CV and job requirements
+              </p>
             </div>
-            <h3 className="font-semibold text-foreground mb-2">
-              Lightning Fast
-            </h3>
-            <p className="text-sm text-grey">Professional letters in seconds</p>
+
+            <div className="flex-1 bg-gradient-to-br from-green-500/10 to-teal-500/10 rounded-xl p-4 border border-green-200/20">
+              <div className="w-8 h-8 bg-gradient-accent rounded-lg flex items-center justify-center mb-3">
+                <svg
+                  className="w-4 h-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">
+                Perfect Match
+              </h3>
+              <p className="text-sm text-grey">
+                Intelligent skill and experience matching
+              </p>
+            </div>
+
+            <div className="flex-1 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-xl p-4 border border-orange-200/20">
+              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center mb-3">
+                <svg
+                  className="w-4 h-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                  />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">
+                Lightning Fast
+              </h3>
+              <p className="text-sm text-grey">Professional letters in seconds</p>
+            </div>
+          </div>
+
+          {/* Accept Button */}
+          <div className="text-center">
+            <CustomButton
+              text={termsAccepted && gdprAccepted ? "Accept & Continue" : "Please accept terms to continue"}
+              callBack={handleAcceptTerms}
+              disabled={!termsAccepted || !gdprAccepted}
+              variant={termsAccepted && gdprAccepted ? "primary" : "secondary"}
+              size="lg"
+              className="w-full"
+            />
           </div>
         </div>
       </Modal>
