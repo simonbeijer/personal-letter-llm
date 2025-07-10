@@ -36,7 +36,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <Modal isOpen={displayModal} onClose={handleCloseModal} showClose={false}>
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Terms and Disclaimer Section */}
@@ -106,9 +106,9 @@ export default function Dashboard() {
           </div>
 
           {/* Feature Boxes */}
-          <div className="flex flex-row space-x-4 mb-6">
-            <div className="flex-1 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-xl p-4 border border-purple-200/20">
-              <div className="w-8 h-8 bg-gradient-secondary rounded-lg flex items-center justify-center mb-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center mb-3">
                 <svg
                   className="w-4 h-4 text-white"
                   fill="none"
@@ -123,16 +123,16 @@ export default function Dashboard() {
                   />
                 </svg>
               </div>
-              <h3 className="font-semibold text-foreground mb-2">
+              <h3 className="font-semibold text-gray-900 mb-2">
                 Smart Generation
               </h3>
-              <p className="text-sm text-grey">
+              <p className="text-sm text-gray-600">
                 AI analyzes your CV and job requirements
               </p>
             </div>
 
-            <div className="flex-1 bg-gradient-to-br from-green-500/10 to-teal-500/10 rounded-xl p-4 border border-green-200/20">
-              <div className="w-8 h-8 bg-gradient-accent rounded-lg flex items-center justify-center mb-3">
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center mb-3">
                 <svg
                   className="w-4 h-4 text-white"
                   fill="none"
@@ -147,16 +147,16 @@ export default function Dashboard() {
                   />
                 </svg>
               </div>
-              <h3 className="font-semibold text-foreground mb-2">
+              <h3 className="font-semibold text-gray-900 mb-2">
                 Perfect Match
               </h3>
-              <p className="text-sm text-grey">
+              <p className="text-sm text-gray-600">
                 Intelligent skill and experience matching
               </p>
             </div>
 
-            <div className="flex-1 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-xl p-4 border border-orange-200/20">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center mb-3">
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center mb-3">
                 <svg
                   className="w-4 h-4 text-white"
                   fill="none"
@@ -171,10 +171,10 @@ export default function Dashboard() {
                   />
                 </svg>
               </div>
-              <h3 className="font-semibold text-foreground mb-2">
+              <h3 className="font-semibold text-gray-900 mb-2">
                 Lightning Fast
               </h3>
-              <p className="text-sm text-grey">Professional letters in seconds</p>
+              <p className="text-sm text-gray-600">Professional letters in seconds</p>
             </div>
           </div>
 
@@ -192,115 +192,72 @@ export default function Dashboard() {
         </div>
       </Modal>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header Section */}
-        <div className="text-center mb-10">
-          <div className="flex items-center justify-center mb-4">
-            <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center mr-3">
-              <svg
-                className="w-5 h-5 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-            </div>
-            <h1 className="text-4xl font-bold text-gray-900">
-              AI Cover Letter Generator
-            </h1>
-          </div>
-          <p className="text-lg text-gray-600 max-w-xl mx-auto">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">AI Cover Letter Generator</h1>
+          <p className="text-lg text-gray-600">
             Create personalized cover letters using your CV and job advertisements
           </p>
         </div>
 
-        {/* Main AI Chat Interface */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {/* AI Chat Window - Main Focus */}
-          <div className="lg:col-span-2">
-            <div className="bg-surface rounded-2xl border-2 border-border p-6 h-96 shadow-sm">
-              <div className="flex items-center mb-4 pb-3 border-b border-border/20">
-                <div className="w-8 h-8 bg-gradient-secondary rounded-full flex items-center justify-center mr-3">
-                  <svg
-                    className="w-4 h-4 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9.663 17h4.673M12 3v1m6.364-.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground">
-                    AI Assistant
-                  </h3>
-                  <p className="text-sm text-success">● Ready to help</p>
-                </div>
+        <div className="grid lg:grid-cols-2 gap-6 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9.663 17h4.673M12 3v1m6.364-.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                  />
+                </svg>
+                AI Assistant
+              </CardTitle>
+              <CardDescription>● Ready to help</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                <p className="text-sm text-gray-600">
+                  👋 Hello! I&apos;m ready to help you create the perfect cover letter. Upload your CV and job description to get started!
+                </p>
               </div>
+              <CustomButton
+                text="🚀 Start Chat - Generate Letter"
+                callBack={navigateToGenerate}
+                variant="primary"
+                size="md"
+                className="w-full"
+              />
+            </CardContent>
+          </Card>
 
-              <div className="space-y-4 mb-4 h-64 overflow-y-auto">
-                <div className="flex items-start space-x-3">
-                  <div className="w-7 h-7 bg-gradient-accent rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg
-                      className="w-4 h-4 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9.663 17h4.673M12 3v1m6.364-.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                      />
-                    </svg>
-                  </div>
-                  <div className="bg-muted rounded-xl p-3 flex-1">
-                    <p className="text-sm text-foreground">
-                      👋 Hello! I&apos;m ready to help you create the perfect cover
-                      letter. Upload your CV and job description to get started!
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Feature Cards - Sidebar */}
-          <div className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Learn more</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <CustomButton
-                  text="🚀 Start Chat - Generate Letter"
-                  callBack={navigateToGenerate}
-                  variant="primary"
-                  size="md"
-                  className="w-full"
-                />
-                <CustomButton
-                  text="Privacy policy & terms of service"
-                  callBack={() => setDisplayModal(true)}
-                  variant="secondary"
-                  size="md"
-                  className="w-full"
-                />
-              </CardContent>
-            </Card>
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Learn more</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <CustomButton
+                text="🚀 Start Chat - Generate Letter"
+                callBack={navigateToGenerate}
+                variant="primary"
+                size="md"
+                className="w-full"
+              />
+              <CustomButton
+                text="Privacy policy & terms of service"
+                callBack={() => setDisplayModal(true)}
+                variant="secondary"
+                size="md"
+                className="w-full"
+              />
+            </CardContent>
+          </Card>
         </div>
 
         {/* Quick Steps */}
