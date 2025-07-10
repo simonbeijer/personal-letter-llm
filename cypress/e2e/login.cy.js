@@ -10,6 +10,6 @@ describe('Home and Login Flow', () => {
 
     cy.get('button[type="submit"]').click();
 
-    cy.contains('Welcome to Personal Letter LLM').should('be.visible');
+    cy.contains('AI Cover Letter Generator').should('be.visible');
   });
 });
