@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prettier:check": "prettier --check .",
+    "prettier:format": "prettier --write .",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:e2e": "cypress run",
@@ -35,7 +37,8 @@
     "eslint": "^9.29.0",
     "eslint-config-next": "15.3.3",
     "jest": "^30.0.0",
-    "jest-environment-jsdom": "^30.0.0"
+    "jest-environment-jsdom": "^30.0.0",
+    "prettier": "^3.4.2"
   },
   "resolutions": {
     "postcss": "8.4.31"
