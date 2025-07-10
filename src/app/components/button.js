@@ -1,5 +1,5 @@
 "use client"
-export default function CustomButton({text, callBack, type = "button", disabled = false, variant = "primary", size = "md" }) {
+export default function CustomButton({text, callBack, type = "button", disabled = false, variant = "primary", size = "md", className = "" }) {
     const baseClasses = "font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 hover:scale-[1.01] active:scale-[0.99]";
     
     const variants = {
@@ -19,7 +19,7 @@ export default function CustomButton({text, callBack, type = "button", disabled 
             onClick={callBack} 
             type={type} 
             disabled={disabled}  
-            className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+            className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'} ${className}`}
         >
             {text}
         </button>
