@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import CustomButton from "@/app/components/button";
 import { useRouter } from "next/navigation";
 import Modal from "@/app/components/modal";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/card";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -35,43 +36,43 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <Modal isOpen={displayModal} onClose={handleCloseModal} showClose={false}>
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Terms and Disclaimer Section */}
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-foreground mb-4">Terms of Use & Privacy Notice</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Terms of Use & Privacy Notice</h2>
             
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4">
+            <div className="mb-4 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
               <div className="flex items-start space-x-3">
-                <svg className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-yellow-600 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.996-.833-2.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" />
                 </svg>
-                <div className="text-sm text-left">
-                  <p className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">Important Disclaimer</p>
-                  <p className="text-yellow-700 dark:text-yellow-300">
-                    This application uses AI technology to generate cover letters. Use at your own risk. 
-                    We bear no responsibility for the content generated, job application outcomes, or any consequences 
-                    arising from the use of this service. Always review and customize generated content before use.
-                  </p>
+                <div className="text-sm text-left pt-1">
+                  <p className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Important Disclaimer</p>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      This application uses AI technology to generate cover letters. Use at your own risk. 
+                      We bear no responsibility for the content generated, job application outcomes, or any consequences 
+                      arising from the use of this service. Always review and customize generated content before use.
+                    </p>
+                  </div>
                 </div>
-              </div>
             </div>
 
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+            <div className="mb-6 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
               <div className="flex items-start space-x-3">
-                <svg className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <div className="text-sm text-left">
-                  <p className="font-semibold text-blue-800 dark:text-blue-200 mb-2">AI Technology Notice</p>
-                  <p className="text-blue-700 dark:text-blue-300">
-                    This service is powered by Google's Gemini AI. Your uploaded documents and generated content 
-                    may be processed by Google's systems according to their privacy policies. 
-                    Please avoid uploading sensitive personal information.
-                  </p>
+                <div className="text-sm text-left pt-1">
+                  <p className="font-semibold text-gray-900 dark:text-gray-100 mb-2">AI Technology Notice</p>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      This service is powered by Google&apos;s Gemini AI. Your uploaded documents and generated content 
+                      may be processed by Google&apos;s systems according to their privacy policies. 
+                      Please avoid uploading sensitive personal information.
+                    </p>
+                  </div>
                 </div>
-              </div>
             </div>
           </div>
 
@@ -84,7 +85,7 @@ export default function Dashboard() {
                 onChange={(e) => setTermsAccepted(e.target.checked)}
                 className="mt-1 w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
-              <span className="text-sm text-foreground">
+              <span className="text-sm text-gray-900 dark:text-gray-100">
                 I agree to the Terms of Service and acknowledge that this is an experimental AI tool. 
                 I understand the limitations and disclaimers stated above.
               </span>
@@ -97,7 +98,7 @@ export default function Dashboard() {
                 onChange={(e) => setGdprAccepted(e.target.checked)}
                 className="mt-1 w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               />
-              <span className="text-sm text-foreground">
+              <span className="text-sm text-gray-900 dark:text-gray-100">
                 I consent to the processing of my data as described above and understand that my documents 
                 will be processed by AI systems for the purpose of generating cover letters.
               </span>
@@ -105,7 +106,7 @@ export default function Dashboard() {
           </div>
 
           {/* Feature Boxes */}
-          <div className="flex flex-row space-x-4 bg-background mb-6">
+          <div className="flex flex-row space-x-4 mb-6">
             <div className="flex-1 bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-xl p-4 border border-purple-200/20">
               <div className="w-8 h-8 bg-gradient-secondary rounded-lg flex items-center justify-center mb-3">
                 <svg
@@ -210,12 +211,12 @@ export default function Dashboard() {
                 />
               </svg>
             </div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Personal Letter LLM
+            <h1 className="text-4xl font-bold text-gray-900">
+              AI Cover Letter Generator
             </h1>
           </div>
-          <p className="text-lg text-grey max-w-xl mx-auto">
-            Generate personalized cover letters using AI
+          <p className="text-lg text-gray-600 max-w-xl mx-auto">
+            Create personalized cover letters using your CV and job advertisements
           </p>
         </div>
 
@@ -278,46 +279,43 @@ export default function Dashboard() {
 
           {/* Feature Cards - Sidebar */}
           <div className="space-y-4">
-            <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-xl p-4 border border-purple-200/20">
-              <div className="pb-2 mt-8">
-                <h3 className="font-semibold text-foreground mb-2">
-                  Learn more
-                </h3>
-                <div className="border-t border-border/20 pt-4 pb-4 ">
-                  <button
-                    onClick={navigateToGenerate}
-                    className="px-4 py-2 rounded bg-gradient-to-br from-green-500/10 to-teal-500/10 p-4 border border-green-200/20"
-                  >
-                    🚀 Start Chat - Generate Letter
-                  </button>
-                </div>
-                <div className="border-t border-border/20 pt-4 pb-4">
-                  <button
-                    onClick={() => setDisplayModal(true)}
-                    className="px-4 py-2 rounded bg-gradient-to-br from-orange-500/10 to-red-500/10 p-4 border border-orange-200/20"
-                  >
-                    Privacy policy & terms of service
-                  </button>
-                </div>
-              </div>
-            </div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Learn more</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <CustomButton
+                  text="🚀 Start Chat - Generate Letter"
+                  callBack={navigateToGenerate}
+                  variant="primary"
+                  size="md"
+                  className="w-full"
+                />
+                <CustomButton
+                  text="Privacy policy & terms of service"
+                  callBack={() => setDisplayModal(true)}
+                  variant="secondary"
+                  size="md"
+                  className="w-full"
+                />
+              </CardContent>
+            </Card>
           </div>
         </div>
 
         {/* Quick Steps */}
-        <div className="bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-900/10 dark:to-purple-900/10 rounded-2xl p-6 border border-blue-200/30">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-foreground mb-2">
-              Quick Start Guide
-            </h2>
-            <p className="text-grey">
-              Three simple steps to your perfect cover letter
-            </p>
-          </div>
+        <Card>
+          <CardHeader>
+            <div className="text-center">
+              <CardTitle className="text-2xl mb-2">Quick Start Guide</CardTitle>
+              <CardDescription>Three simple steps to your perfect cover letter</CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-3">
                 <svg
                   className="w-6 h-6 text-white"
                   fill="none"
@@ -332,15 +330,15 @@ export default function Dashboard() {
                   />
                 </svg>
               </div>
-              <div className="text-primary font-bold text-sm mb-1">Step 1</div>
-              <h3 className="font-semibold text-foreground mb-2">Upload CV</h3>
-              <p className="text-sm text-grey">
+              <div className="text-yellow-600 font-bold text-sm mb-1">Step 1</div>
+              <h3 className="font-semibold text-gray-900 mb-2">Upload CV</h3>
+              <p className="text-sm text-gray-600">
                 Share your experience and skills
               </p>
             </div>
 
             <div className="text-center">
-              <div className="w-12 h-12 bg-gradient-secondary rounded-full flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
                 <svg
                   className="w-6 h-6 text-white"
                   fill="none"
@@ -355,17 +353,17 @@ export default function Dashboard() {
                   />
                 </svg>
               </div>
-              <div className="text-secondary font-bold text-sm mb-1">
+              <div className="text-blue-600 font-bold text-sm mb-1">
                 Step 2
               </div>
-              <h3 className="font-semibold text-foreground mb-2">
+              <h3 className="font-semibold text-gray-900 mb-2">
                 Add Job Info
               </h3>
-              <p className="text-sm text-grey">Paste job requirements</p>
+              <p className="text-sm text-gray-600">Paste job requirements</p>
             </div>
 
             <div className="text-center">
-              <div className="w-12 h-12 bg-gradient-accent rounded-full flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
                 <svg
                   className="w-6 h-6 text-white"
                   fill="none"
@@ -380,12 +378,13 @@ export default function Dashboard() {
                   />
                 </svg>
               </div>
-              <div className="text-accent font-bold text-sm mb-1">Step 3</div>
-              <h3 className="font-semibold text-foreground mb-2">Get Letter</h3>
-              <p className="text-sm text-grey">Receive personalized content</p>
+              <div className="text-green-600 font-bold text-sm mb-1">Step 3</div>
+              <h3 className="font-semibold text-gray-900 mb-2">Get Letter</h3>
+              <p className="text-sm text-gray-600">Receive personalized content</p>
             </div>
           </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
