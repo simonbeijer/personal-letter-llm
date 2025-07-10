@@ -13,9 +13,9 @@ import {
   CloudArrowUpIcon,
   PlusIcon,
   PencilSquareIcon,
-  RocketLaunchIcon,
-  LightBulbIcon
+  RocketLaunchIcon
 } from "@heroicons/react/24/outline";
+import { LightBulbIcon } from "@heroicons/react/24/solid";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -55,9 +55,9 @@ export default function Dashboard() {
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Terms of Use & Privacy Notice</h2>
             
-            <div className="mb-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <div className="mb-4 bg-orange-50 dark:bg-orange-900/5 border border-orange-200 dark:border-orange-800/20 rounded-lg p-4">
               <div className="flex items-start space-x-3">
-                <ExclamationTriangleIcon className="h-5 w-5 mt-1 flex-shrink-0" />
+                <ExclamationTriangleIcon className="h-5 w-5 text-orange-500 mt-1 flex-shrink-0" />
                 <div className="text-sm text-left pt-1">
                   <p className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Important Disclaimer</p>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -69,9 +69,9 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            <div className="mb-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <div className="mb-6 bg-blue-50 dark:bg-blue-900/5 border border-blue-200 dark:border-blue-800/20 rounded-lg p-4">
               <div className="flex items-start space-x-3">
-                <InformationCircleIcon className="h-5 w-5 mt-1 flex-shrink-0" />
+                <InformationCircleIcon className="h-5 w-5 text-blue-500 mt-1 flex-shrink-0" />
                 <div className="text-sm text-left pt-1">
                   <p className="font-semibold text-gray-900 dark:text-gray-100 mb-2">AI Technology Notice</p>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -91,7 +91,7 @@ export default function Dashboard() {
                 type="checkbox"
                 checked={termsAccepted}
                 onChange={(e) => setTermsAccepted(e.target.checked)}
-                className="mt-1 w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
+                className="mt-1 w-4 h-4 text-primary bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-primary focus:ring-2"
               />
               <span className="text-sm text-gray-900 dark:text-gray-100">
                 I agree to the Terms of Service and acknowledge that this is an experimental AI tool. 
@@ -104,7 +104,7 @@ export default function Dashboard() {
                 type="checkbox"
                 checked={gdprAccepted}
                 onChange={(e) => setGdprAccepted(e.target.checked)}
-                className="mt-1 w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
+                className="mt-1 w-4 h-4 text-primary bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-primary focus:ring-2"
               />
               <span className="text-sm text-gray-900 dark:text-gray-100">
                 I consent to the processing of my data as described above and understand that my documents 
@@ -140,28 +140,28 @@ export default function Dashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <LightBulbIcon className="h-5 w-5" />
+                <LightBulbIcon className="h-5 w-5 text-yellow-500" />
                 AI Assistant
               </CardTitle>
               <CardDescription><span className="text-success">●</span> Ready to help</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                <p className="text-sm text-gray-600 dark:text-gray-300">
+                <p className="text-sm text-gray-600">
                   👋 Hello! I&apos;m ready to help you create the perfect cover letter. Upload your CV and job description to get started!
                 </p>
               </div>
               <CustomButton
                 text={
                   <div className="flex items-center justify-center gap-2">
-                    <RocketLaunchIcon className="h-4 w-4" />
+                    <RocketLaunchIcon className="h-4 w-4 text-gray-700 dark:text-gray-300" />
                     Start Chat - Generate Letter
                   </div>
                 }
                 callBack={navigateToGenerate}
                 variant="outline"
                 size="md"
-                className="w-full"
+                className="w-full bg-gray-100 dark:bg-gray-700 !border-gray-300 dark:!border-gray-600 !text-gray-800 dark:!text-gray-200 hover:!bg-gray-200 dark:hover:!bg-gray-600 hover:!text-gray-800 dark:hover:!text-gray-200"
               />
             </CardContent>
           </Card>
@@ -188,7 +188,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>
             <CardContent className="p-6 pt-8">
-              <PencilSquareIcon className="h-8 w-8 mb-3" />
+              <PencilSquareIcon className="h-8 w-8 text-gray-400 mb-3" />
               <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
                 Smart Generation
               </h3>
@@ -200,7 +200,7 @@ export default function Dashboard() {
 
           <Card>
             <CardContent className="p-6 pt-8">
-              <SparklesIcon className="h-8 w-8 mb-3" />
+              <SparklesIcon className="h-8 w-8 text-gray-400 mb-3" />
               <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
                 Perfect Match
               </h3>
@@ -212,7 +212,7 @@ export default function Dashboard() {
 
           <Card>
             <CardContent className="p-6 pt-8">
-              <BoltIcon className="h-8 w-8 mb-3" />
+              <BoltIcon className="h-8 w-8 text-gray-400 mb-3" />
               <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
                 Lightning Fast
               </h3>
@@ -242,7 +242,7 @@ export default function Dashboard() {
             </div>
 
             <div className="text-center">
-              <PlusIcon className="h-12 w-12 mx-auto mb-4" />
+              <PlusIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <div className="font-bold text-sm mb-1">
                 Step 2
               </div>
