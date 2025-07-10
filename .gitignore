@@ -17,6 +17,10 @@
 /.claude/*
 CLAUDE.md
 
+# LOGS
+/logs
+/logs/*
+
 # testing
 /coverage
 
