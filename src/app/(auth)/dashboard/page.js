@@ -4,6 +4,18 @@ import CustomButton from "@/app/components/button";
 import { useRouter } from "next/navigation";
 import Modal from "@/app/components/modal";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/card";
+import { 
+  SparklesIcon, 
+  DocumentTextIcon, 
+  BoltIcon, 
+  ExclamationTriangleIcon,
+  InformationCircleIcon,
+  CloudArrowUpIcon,
+  PlusIcon,
+  PencilSquareIcon,
+  RocketLaunchIcon,
+  LightBulbIcon
+} from "@heroicons/react/24/outline";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -43,11 +55,9 @@ export default function Dashboard() {
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Terms of Use & Privacy Notice</h2>
             
-            <div className="mb-4 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+            <div className="mb-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
               <div className="flex items-start space-x-3">
-                <svg className="w-5 h-5 text-yellow-600 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.996-.833-2.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                </svg>
+                <ExclamationTriangleIcon className="h-5 w-5 mt-1 flex-shrink-0" />
                 <div className="text-sm text-left pt-1">
                   <p className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Important Disclaimer</p>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -59,11 +69,9 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            <div className="mb-6 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+            <div className="mb-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
               <div className="flex items-start space-x-3">
-                <svg className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <InformationCircleIcon className="h-5 w-5 mt-1 flex-shrink-0" />
                 <div className="text-sm text-left pt-1">
                   <p className="font-semibold text-gray-900 dark:text-gray-100 mb-2">AI Technology Notice</p>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -83,7 +91,7 @@ export default function Dashboard() {
                 type="checkbox"
                 checked={termsAccepted}
                 onChange={(e) => setTermsAccepted(e.target.checked)}
-                className="mt-1 w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                className="mt-1 w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
               />
               <span className="text-sm text-gray-900 dark:text-gray-100">
                 I agree to the Terms of Service and acknowledge that this is an experimental AI tool. 
@@ -96,7 +104,7 @@ export default function Dashboard() {
                 type="checkbox"
                 checked={gdprAccepted}
                 onChange={(e) => setGdprAccepted(e.target.checked)}
-                className="mt-1 w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                className="mt-1 w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
               />
               <span className="text-sm text-gray-900 dark:text-gray-100">
                 I consent to the processing of my data as described above and understand that my documents 
@@ -105,78 +113,6 @@ export default function Dashboard() {
             </label>
           </div>
 
-          {/* Feature Boxes */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center mb-3">
-                <svg
-                  className="w-4 h-4 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                  />
-                </svg>
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Smart Generation
-              </h3>
-              <p className="text-sm text-gray-600">
-                AI analyzes your CV and job requirements
-              </p>
-            </div>
-
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center mb-3">
-                <svg
-                  className="w-4 h-4 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
-                </svg>
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Perfect Match
-              </h3>
-              <p className="text-sm text-gray-600">
-                Intelligent skill and experience matching
-              </p>
-            </div>
-
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center mb-3">
-                <svg
-                  className="w-4 h-4 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                  />
-                </svg>
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Lightning Fast
-              </h3>
-              <p className="text-sm text-gray-600">Professional letters in seconds</p>
-            </div>
-          </div>
 
           {/* Accept Button */}
           <div className="text-center">
@@ -186,7 +122,7 @@ export default function Dashboard() {
               disabled={!termsAccepted || !gdprAccepted}
               variant={termsAccepted && gdprAccepted ? "primary" : "secondary"}
               size="lg"
-              className="w-full"
+              className={`w-full ${termsAccepted && gdprAccepted ? 'bg-gradient-to-r from-blue-500 to-blue-600 !text-white hover:from-blue-600 hover:to-blue-700' : ''}`}
             />
           </div>
         </div>
@@ -204,33 +140,26 @@ export default function Dashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <svg
-                  className="w-5 h-5 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9.663 17h4.673M12 3v1m6.364-.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                  />
-                </svg>
+                <LightBulbIcon className="h-5 w-5" />
                 AI Assistant
               </CardTitle>
-              <CardDescription>● Ready to help</CardDescription>
+              <CardDescription><span className="text-success">●</span> Ready to help</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-300">
                   👋 Hello! I&apos;m ready to help you create the perfect cover letter. Upload your CV and job description to get started!
                 </p>
               </div>
               <CustomButton
-                text="🚀 Start Chat - Generate Letter"
+                text={
+                  <div className="flex items-center justify-center gap-2">
+                    <RocketLaunchIcon className="h-4 w-4" />
+                    Start Chat - Generate Letter
+                  </div>
+                }
                 callBack={navigateToGenerate}
-                variant="primary"
+                variant="outline"
                 size="md"
                 className="w-full"
               />
@@ -241,21 +170,53 @@ export default function Dashboard() {
             <CardHeader>
               <CardTitle>Learn more</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <CustomButton
-                text="🚀 Start Chat - Generate Letter"
-                callBack={navigateToGenerate}
-                variant="primary"
-                size="md"
-                className="w-full"
-              />
-              <CustomButton
-                text="Privacy policy & terms of service"
-                callBack={() => setDisplayModal(true)}
-                variant="secondary"
-                size="md"
-                className="w-full"
-              />
+            <CardContent>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                Get familiar with our service and understand how we protect your data.
+              </p>
+              <button
+                onClick={() => setDisplayModal(true)}
+                className="text-primary hover:text-primary/80 underline text-sm font-medium transition-colors duration-200"
+              >
+                Privacy policy & terms of service
+              </button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <Card>
+            <CardContent className="p-6 pt-8">
+              <PencilSquareIcon className="h-8 w-8 mb-3" />
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                Smart Generation
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                AI analyzes your CV and job requirements
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6 pt-8">
+              <SparklesIcon className="h-8 w-8 mb-3" />
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                Perfect Match
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Intelligent skill and experience matching
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6 pt-8">
+              <BoltIcon className="h-8 w-8 mb-3" />
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                Lightning Fast
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Professional letters in seconds</p>
             </CardContent>
           </Card>
         </div>
@@ -272,72 +233,30 @@ export default function Dashboard() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                  />
-                </svg>
-              </div>
-              <div className="text-yellow-600 font-bold text-sm mb-1">Step 1</div>
-              <h3 className="font-semibold text-gray-900 mb-2">Upload CV</h3>
-              <p className="text-sm text-gray-600">
+              <CloudArrowUpIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <div className="font-bold text-sm mb-1">Step 1</div>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Upload CV</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
                 Share your experience and skills
               </p>
             </div>
 
             <div className="text-center">
-              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
-              </div>
-              <div className="text-blue-600 font-bold text-sm mb-1">
+              <PlusIcon className="h-12 w-12 mx-auto mb-4" />
+              <div className="font-bold text-sm mb-1">
                 Step 2
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
                 Add Job Info
               </h3>
-              <p className="text-sm text-gray-600">Paste job requirements</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Paste job requirements</p>
             </div>
 
             <div className="text-center">
-              <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-              </div>
-              <div className="text-green-600 font-bold text-sm mb-1">Step 3</div>
-              <h3 className="font-semibold text-gray-900 mb-2">Get Letter</h3>
-              <p className="text-sm text-gray-600">Receive personalized content</p>
+              <DocumentTextIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <div className="font-bold text-sm mb-1">Step 3</div>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Get Letter</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Receive personalized content</p>
             </div>
           </div>
           </CardContent>
