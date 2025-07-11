@@ -1,62 +1,59 @@
 "use client";
-import { useState } from "react";
 
-export default function SparklingStars({ className = "h-6 w-6 text-yellow-500" }) {
-  const [isHovered, setIsHovered] = useState(false);
-
+export default function SparklingStars({ className = "h-6 w-6 text-yellow-500", isHovered = false }) {
   return (
-    <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="inline-block"
-    >
-      <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+    <div className="inline-block">
+      <svg className={className} fill="currentColor" viewBox="0 0 32 32">
         {/* Main large star - always visible */}
-        <path d="M12 2l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-1.5L12 2z" />
+        <path d="M16 4l3 6.5L26 12l-5 5 1.5 7-6.5-3.5L9 24l1.5-7L5 12l7-1.5L16 4z" />
         
-        {/* Small star top right - always in DOM, visibility controlled by CSS */}
+        {/* Small star top right */}
         <path 
-          d="M19 3l0.8 1.6 1.6 0.4-1.2 1.2 0.4 1.6-1.6-0.8-1.6 0.8 0.4-1.6-1.2-1.2 1.6-0.4L19 3z" 
+          d="M25 6l1.2 2.4 2.4 0.6-1.8 1.8 0.6 2.4-2.4-1.2-2.4 1.2 0.6-2.4L21.4 9l2.4-0.6L25 6z" 
           style={{
             opacity: isHovered ? 0.8 : 0,
-            transition: 'opacity 0.3s ease-in-out'
+            transform: isHovered ? 'scale(1) rotate(0deg)' : 'scale(0.3) rotate(-180deg)',
+            transformOrigin: 'center',
+            transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+            transitionDelay: isHovered ? '0.1s' : '0s'
           }}
-        >
-          <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite" />
-        </path>
+        />
         
-        {/* Small star bottom left - always in DOM, visibility controlled by CSS */}
+        {/* Small star bottom left */}
         <path 
-          d="M5 19l0.8 1.6 1.6 0.4-1.2 1.2 0.4 1.6-1.6-0.8-1.6 0.8 0.4-1.6-1.2-1.2 1.6-0.4L5 19z" 
+          d="M7 23l1.2 2.4 2.4 0.6-1.8 1.8 0.6 2.4-2.4-1.2-2.4 1.2 0.6-2.4L3.4 26l2.4-0.6L7 23z" 
+          style={{
+            opacity: isHovered ? 0.7 : 0,
+            transform: isHovered ? 'scale(1) rotate(0deg)' : 'scale(0.3) rotate(180deg)',
+            transformOrigin: 'center',
+            transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+            transitionDelay: isHovered ? '0.2s' : '0s'
+          }}
+        />
+        
+        {/* Tiny star top left */}
+        <path 
+          d="M8 8l0.8 1.6 1.6 0.4-1.2 1.2 0.4 1.6-1.6-0.8-1.6 0.8 0.4-1.6L4.8 10l1.6-0.4L8 8z" 
           style={{
             opacity: isHovered ? 0.6 : 0,
-            transition: 'opacity 0.3s ease-in-out'
+            transform: isHovered ? 'scale(1) rotate(0deg)' : 'scale(0.2) rotate(-90deg)',
+            transformOrigin: 'center',
+            transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+            transitionDelay: isHovered ? '0.3s' : '0s'
           }}
-        >
-          <animate attributeName="opacity" values="0.6;0.1;0.6" dur="2s" repeatCount="indefinite" />
-        </path>
+        />
         
-        {/* Tiny star top left - always in DOM, visibility controlled by CSS */}
+        {/* Tiny star bottom right */}
         <path 
-          d="M3 5l0.5 1 1 0.25-0.75 0.75 0.25 1-1-0.5-1 0.5 0.25-1L1.5 6.25l1-0.25L3 5z" 
-          style={{
-            opacity: isHovered ? 0.4 : 0,
-            transition: 'opacity 0.3s ease-in-out'
-          }}
-        >
-          <animate attributeName="opacity" values="0.4;0.1;0.4" dur="2.5s" repeatCount="indefinite" />
-        </path>
-        
-        {/* Tiny star bottom right - always in DOM, visibility controlled by CSS */}
-        <path 
-          d="M21 19l0.5 1 1 0.25-0.75 0.75 0.25 1-1-0.5-1 0.5 0.25-1-0.75-0.75 1-0.25L21 19z" 
+          d="M24 24l0.8 1.6 1.6 0.4-1.2 1.2 0.4 1.6-1.6-0.8-1.6 0.8 0.4-1.6-1.2-1.2 1.6-0.4L24 24z" 
           style={{
             opacity: isHovered ? 0.5 : 0,
-            transition: 'opacity 0.3s ease-in-out'
+            transform: isHovered ? 'scale(1) rotate(0deg)' : 'scale(0.2) rotate(90deg)',
+            transformOrigin: 'center',
+            transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+            transitionDelay: isHovered ? '0.4s' : '0s'
           }}
-        >
-          <animate attributeName="opacity" values="0.5;0.1;0.5" dur="1.8s" repeatCount="indefinite" />
-        </path>
+        />
       </svg>
     </div>
   );

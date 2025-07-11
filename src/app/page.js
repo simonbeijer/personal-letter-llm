@@ -13,6 +13,7 @@ import { RocketLaunchIcon } from "@heroicons/react/24/outline";
 
 export default function Home() {
   const [showTermsModal, setShowTermsModal] = useState(false);
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
   const router = useRouter();
 
   const handleGetStarted = () => {
@@ -37,6 +38,8 @@ export default function Home() {
           <div className="flex justify-center">
             <button
               onClick={handleGetStarted}
+              onMouseEnter={() => setIsButtonHovered(true)}
+              onMouseLeave={() => setIsButtonHovered(false)}
               className="relative px-12 py-4 text-xl font-bold text-gray-800 bg-gradient-to-r from-slate-200 to-slate-300 hover:from-slate-300 hover:to-slate-400 rounded-lg shadow-md transform hover:scale-105 transition-all duration-500 border-2 border-transparent"
               style={{
                 background: 'linear-gradient(to right, #f1f5f9, #e2e8f0) padding-box, linear-gradient(45deg, #c0c0c0, #e5e5e5, #c0c0c0, #f8fafc) border-box',
@@ -44,7 +47,7 @@ export default function Home() {
               }}
             >
               <div className="flex items-center justify-center gap-2">
-                <SparklingStars />
+                <SparklingStars isHovered={isButtonHovered} />
                 Get Started
               </div>
             </button>
