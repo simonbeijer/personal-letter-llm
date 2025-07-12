@@ -23,6 +23,3 @@ export default function Modal({ isOpen, onClose, children, showClose = true }) {
     </div>
   );
 }
-
-// If you want to use named export instead of default export, use:
-// export { Modal };
