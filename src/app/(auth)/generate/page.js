@@ -110,7 +110,7 @@ export default function Generate() {
               disabled={!cvText.trim() || !jobAd.trim()}
               variant="primary"
               size="lg"
-              className="w-full"
+              className="w-full !text-gray-900"
             />
           </div>
 
