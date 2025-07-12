@@ -51,11 +51,11 @@ export default function Dashboard() {
 
         {/* Action Cards */}
         <div className="grid lg:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Generate Cover Letter</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Generate Cover Letter</h3>
             </div>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
               Create a personalized cover letter using your CV and job requirements.
             </p>
             <CustomButton
@@ -72,11 +72,11 @@ export default function Dashboard() {
             />
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Account Settings</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Account Settings</h3>
             </div>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
               Manage your account preferences and view terms of service.
             </p>
             <div className="space-y-2">
