@@ -6,7 +6,7 @@ import CustomButton from "@/app/components/button";
 import UserStats from "@/app/components/userStats";
 import SessionInfo from "@/app/components/sessionInfo";
 import TermsModal from "@/app/components/termsModal";
-import { RocketLaunchIcon } from "@heroicons/react/24/outline";
+import { SparklesIcon } from "@heroicons/react/24/outline";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -49,18 +49,11 @@ export default function Dashboard() {
           </p>
         </div>
 
-        {/* User Stats */}
-        <UserStats user={user} />
-
-        {/* Session Info */}
-        <SessionInfo />
-
         {/* Action Cards */}
         <div className="grid lg:grid-cols-2 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Generate Cover Letter</h3>
-              <RocketLaunchIcon className="h-6 w-6 text-blue-500" />
             </div>
             <p className="text-sm text-gray-600 mb-4">
               Create a personalized cover letter using your CV and job requirements.
@@ -68,14 +61,14 @@ export default function Dashboard() {
             <CustomButton
               text={
                 <div className="flex items-center justify-center gap-2">
-                  <RocketLaunchIcon className="h-4 w-4" />
+                  <SparklesIcon className="h-4 w-4" />
                   Generate Letter
                 </div>
               }
               callBack={navigateToGenerate}
               variant="primary"
               size="lg"
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 !text-white hover:from-blue-600 hover:to-blue-700"
+              className="w-full"
             />
           </div>
 
@@ -102,6 +95,12 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+
+        {/* User Stats */}
+        <UserStats user={user} />
+
+        {/* Session Info */}
+        <SessionInfo />
       </div>
     </div>
   );
