@@ -55,7 +55,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4">
+    <div className="min-h-[calc(100vh-3rem-2.5rem)] bg-gradient-to-br from-blue-50 to-indigo-100 dark:bg-gradient-primary flex items-center justify-center p-4">
       <div className="w-full max-w-xs">
         <div className="bg-surface/95 backdrop-blur-sm rounded-2xl shadow-sm p-6 border border-white/10">
           <div className="text-center mb-6">
