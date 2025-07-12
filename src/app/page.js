@@ -40,7 +40,7 @@ export default function Home() {
               onClick={handleGetStarted}
               onMouseEnter={() => setIsButtonHovered(true)}
               onMouseLeave={() => setIsButtonHovered(false)}
-              className="relative px-12 py-4 text-xl font-bold text-gray-800 bg-gradient-to-r from-slate-200 to-slate-300 hover:from-slate-300 hover:to-slate-400 rounded-lg shadow-md transform hover:scale-105 transition-all duration-500 border-2 border-transparent"
+              className="relative px-12 py-4 text-xl font-bold text-gray-800 bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-400 rounded-lg shadow-md transform hover:scale-102 transition-all duration-500 border-2 border-transparent"
               style={{
                 background: 'linear-gradient(to right, #f1f5f9, #e2e8f0) padding-box, linear-gradient(45deg, #c0c0c0, #e5e5e5, #c0c0c0, #f8fafc) border-box',
                 border: '2px solid transparent'
