@@ -6,6 +6,7 @@ import * as jose from "jose";
 const SECRET = process.env.JWT_SECRET;
 
 export async function POST(request) {
+  console.log("DATABASE_URL:", process.env.DATABASE_URL);
   try {
     const { email, password } = await request.json();
 
@@ -17,7 +18,6 @@ export async function POST(request) {
     }
 
     const user = await prisma.user.findUnique({ where: { email } });
-    console.log("DATABASE_URL:", process.env.DATABASE_URL);
 
     if (!user) {
       console.log(`[Auth] Login attempt failed - user not found: ${email}`);
