@@ -17,6 +17,8 @@
 /.claude/*
 CLAUDE.md
 
+/src/app/(auth)/generate/mock.js
+
 # LOGS
 /logs
 /logs/*
