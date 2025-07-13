@@ -17,6 +17,7 @@ export async function POST(request) {
     }
 
     const user = await prisma.user.findUnique({ where: { email } });
+    console.log("DATABASE_URL:", process.env.DATABASE_URL);
 
     if (!user) {
       console.log(`[Auth] Login attempt failed - user not found: ${email}`);
