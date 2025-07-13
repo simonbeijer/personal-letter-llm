@@ -11,11 +11,10 @@ import {
   ClipboardDocumentIcon, 
   ArrowDownTrayIcon 
 } from "@heroicons/react/24/outline";
-import mock from "./mock";
 
 export default function Generate() {
-  const [cvText, setCvText] = useState(mock.cv || "");
-  const [jobAd, setJobAd] = useState(mock.ad || "");
+  const [cvText, setCvText] = useState("");
+  const [jobAd, setJobAd] = useState("");
   const [cvFile, setCvFile] = useState(null);
   const [coverLetter, setCoverLetter] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
