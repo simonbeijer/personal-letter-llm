@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
           <footer className="flex justify-center items-center h-10">
             © 2025 My Site
           </footer>
+          <Analytics />
       </body>
     </html>
   );
