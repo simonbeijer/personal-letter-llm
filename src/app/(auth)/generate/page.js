@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/app/components/tabs";
 import CustomButton from "@/app/components/button";
+import RadioGroup from "@/app/components/radioGroup";
 import { 
   DocumentArrowUpIcon, 
   DocumentTextIcon, 
@@ -19,6 +20,7 @@ export default function Generate() {
   const [coverLetter, setCoverLetter] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState("");
+  const [language, setLanguage] = useState("english");
 
   const cvCharCount = cvText.length;
   const jobAdCharCount = jobAd.length;
@@ -51,6 +53,7 @@ export default function Generate() {
         body: JSON.stringify({
           cv: cvText.trim(),
           jobAd: jobAd.trim(),
+          language: language,
         }),
       });
 
@@ -161,6 +164,21 @@ export default function Generate() {
                     <span className="text-gray-400">Recommended: 100-800 characters</span>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+              <CardContent className="py-4">
+                <RadioGroup
+                  name="language"
+                  label="Output Language"
+                  selected={language}
+                  onChange={setLanguage}
+                  options={[
+                    { value: 'english', label: '🇬🇧 English' },
+                    { value: 'swedish', label: '🇸🇪 Swedish' }
+                  ]}
+                />
               </CardContent>
             </Card>
 

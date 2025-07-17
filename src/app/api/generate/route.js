@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function POST(request) {
   try {
-    const { cv, jobAd } = await request.json();
+    const { cv, jobAd, language = 'english' } = await request.json();
 
     if (!cv || !jobAd) {
       return NextResponse.json(
@@ -21,6 +21,13 @@ export async function POST(request) {
       );
     }
 
+    if (language && !['english', 'swedish'].includes(language)) {
+      return NextResponse.json(
+        { error: 'Language must be either "english" or "swedish"' },
+        { status: 400 }
+      );
+    }
+
     const model = genAI.getGenerativeModel({ 
       model: 'gemini-2.0-flash',
       generationConfig: {
@@ -29,80 +36,57 @@ export async function POST(request) {
       }
     });
 
-    const prompt = `You are an expert cover letter writer with 10+ years of experience helping candidates secure interviews across various industries. Your specialty is crafting compelling "why I should be hired" narratives that immediately capture hiring managers' attention.
+    const languageInstructions = language === 'swedish' 
+      ? `Generate the cover letter in Swedish. Follow the reference example's direct, personal Swedish style with "Hej!" opening and "Vänliga hälsningar" closing. Use natural Swedish expressions and professional but approachable tone.`
+      : `Generate the cover letter in English. Use professional business letter format with "Dear Hiring Manager" or similar opening and "Sincerely" closing. Maintain professional but personable tone appropriate for international business context.`;
 
-**CHAIN OF THOUGHT PROCESS:**
-Follow this step-by-step approach to create a superior cover letter:
+    const prompt = `You are an expert cover letter writer. Create a compelling cover letter that answers "why should they hire me?" 
 
-**STEP 1: HOOK DEVELOPMENT**
-First, craft a compelling hook by identifying:
-- What makes this candidate uniquely qualified for THIS specific role?
-- What's their strongest value proposition that would make a hiring manager stop and read?
-- What specific achievement or skill combination sets them apart?
-
-Examples of strong hooks:
-- "Having increased e-commerce conversion rates by 35% through UX optimization..."
-- "As a data scientist who reduced customer churn by 22% at my previous company..."
-- "With 5 years of experience scaling startup teams from 10 to 100+ employees..."
-
-**STEP 2: "WHY I SHOULD BE HIRED" CORE MESSAGE**
-Then, develop the central argument:
-- What's the main problem this role needs to solve?
-- How does this candidate solve that problem better than others?
-- What specific results can they deliver based on their track record?
-
-**STEP 3: SUPPORTING EVIDENCE GATHERING**
-Finally, gather supporting details:
-- 2-3 specific examples from CV that prove the core message
-- Quantifiable achievements that demonstrate impact
-- Skills that directly match job requirements
-- Company culture/values alignment (if apparent from job ad)
+**APPROACH:**
+1. **Lead with impact** - Start with the most important information. Write a brief and compelling introduction, explaining the job you are applying for and why you are the right fit. This will immediately capture the reader's attention.
+2. **Customize precisely** - Customize your letter for the specific job you are applying to. Include exactly what the employer is looking for, so that your letter addresses their requirements.
+3. **Professional but accessible** - Express yourself professionally, but avoid being overly formal or using industry-specific jargon that may not be understood by everyone. Avoid getting too detailed.
+4. **Show, don't tell** - Provide examples that illustrate your personal qualities. Rather than listing your personal qualities, describing situations that demonstrate them will leave a lasting impression on the reader. You can draw examples from your work, studies, or leisure activities.
+5. **Eliminate clichés** - Avoid using clichés. Instead of generic phrases like "I work well under pressure" or "I'm outgoing", be specific and provide examples of how you work and what kind of person you are.
+6. **End positively** - You can end your letter with a positive statement, such as: "I look forward to meeting you and having the opportunity to share more about myself."
 
 **INPUT MATERIALS:**
+**CV:** ${cv}
+**JOB ADVERTISEMENT:** ${jobAd}
 
-**CV:**
-${cv}
+**REFERENCE EXAMPLE:**
+Here's an example of effective cover letter structure and tone:
 
-**JOB ADVERTISEMENT:**
-${jobAd}
+"Hej!
+Jag heter Simon och söker en ny utmaning inom webbutveckling – en roll där jag får växa tekniskt, samarbeta i team och bidra till lösningar med samhällsnytta.
 
-**GENERATION REQUIREMENTS:**
-Now, using your chain of thought analysis, create a professional cover letter:
+De senaste åren har jag arbetat som frontendutvecklare på Keeros AB med nyutveckling och refaktorering av molnbaserade plattformar. Jag har byggt användarvänliga gränssnitt i Vue.js, integrerat med PHP/MySQL, och jobbat med Figma, Jest, Cypress och teknisk support.
 
-**Opening Paragraph (Lead with your hook):**
-- Start with the compelling hook you developed in Step 1
-- Immediately establish your unique value proposition
-- Reference the specific role and company
-- Preview your "why I should be hired" message from Step 2
+Min grund i React kommer från studier och praktik, och jag har vidareutvecklat den genom egna projekt i React/Next.js, där jag bl.a. integrerat LLM-baserade AI-funktioner.
 
-**Body Paragraphs (Prove your case):**
-- **Primary Value**: Expand on your core "why hire me" message with the strongest example from Step 3
-- **Supporting Evidence**: Add 1-2 additional examples that reinforce your value proposition
-- **Company Fit**: Show how your approach aligns with their needs and culture (if apparent)
+Det som driver mig är att skapa tydliga, lättanvända gränssnitt och skriva genomtänkt kod. Jag trivs i agila team där man delar idéer och samarbetar för att utveckla smarta lösningar. Med mitt öga för användarupplevelse och sinne för detaljer hoppas jag kunna bidra positivt till ert team.
 
-**Closing Paragraph:**
-- Strong call to action expressing enthusiasm for next steps
-- Professional closing with availability for interview
-- Thank them for their consideration
+Jag ser fram emot att höra från er och berätta mer om hur jag kan bidra.
 
-**QUALITY STANDARDS:**
-- Length: EXACTLY 3 paragraphs (200-250 words maximum)
-- Tone: Professional but personable, confident without being arrogant
-- Include specific examples from CV (not generic statements)
-- Use active voice and strong action verbs
-- Incorporate 2-3 keywords from the job posting naturally
-- Ensure every sentence answers "why should they hire me?"
+Vänliga hälsningar,
+Simon Beijer"
 
-**FALLBACK STRATEGIES:**
-- When skills don't perfectly match: Focus on transferable skills and learning agility
-- When company information is limited: Use industry-standard challenges and solutions
-- When achievements aren't quantifiable: Use qualitative impacts and outcomes
+Notice: Direct personal opening, specific technical examples, growth narrative, collaboration emphasis, and positive forward-looking close.
 
-**IMPORTANT OUTPUT INSTRUCTION:**
-Generate ONLY the final cover letter - do not show your thinking process or chain-of-thought steps. Start directly with the letter content. The letter must be complete and end with a proper closing and signature line.
+**LANGUAGE INSTRUCTIONS:**
+${languageInstructions}
 
+**REQUIREMENTS:**
+- 3 paragraphs, 200-250 words total
+- Professional but personable tone (avoid over-formality and jargon)
+- Include specific achievements with numbers/results when possible
+- Reference the company/role specifically
+- Use active voice and relevant keywords from job posting
+- **NO CLICHÉS**: Avoid generic phrases like "I work well under pressure", "I'm a team player", "I'm detail-oriented"
+- **Use specific examples**: Instead of listing qualities, describe situations that demonstrate them
+- End with positive, forward-looking statement and professional closing
 
-Generate a complete, personalized cover letter following this comprehensive framework:`;
+Generate only the final cover letter - no explanations or thinking steps.`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -112,23 +96,11 @@ Generate a complete, personalized cover letter following this comprehensive fram
   } catch (error) {
     console.error('Error generating cover letter:', error);
     
-    if (error.message?.includes('API key')) {
-      return NextResponse.json(
-        { error: 'API key configuration error. Please check your Gemini API key.' },
-        { status: 500 }
-      );
-    }
+    const status = error.message?.includes('rate') || error.message?.includes('quota') ? 429 : 500;
+    const message = status === 429 
+      ? 'Rate limit exceeded. Please try again later.'
+      : 'Failed to generate cover letter. Please try again.';
     
-    if (error.message?.includes('quota') || error.message?.includes('rate')) {
-      return NextResponse.json(
-        { error: 'API rate limit exceeded. Please try again later.' },
-        { status: 429 }
-      );
-    }
-    
-    return NextResponse.json(
-      { error: 'Failed to generate cover letter. Please try again.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: message }, { status });
   }
 }
