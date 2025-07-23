@@ -22,7 +22,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' generativelanguage.googleapis.com va.vercel-scripts.com;"
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-jqiZxOcKsKr0ZT2GYz3fP8tcJd3k4Q7eAPIYCMJvWRg=' va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' generativelanguage.googleapis.com va.vercel-scripts.com;"
           },
         ],
       },
