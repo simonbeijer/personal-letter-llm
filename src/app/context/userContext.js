@@ -16,7 +16,7 @@ export const UserProvider = ({ children }) => {
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
-        console.log('[Context] User loaded:', data.user.email);
+        console.log('[Context] User loaded:', data.user.id);
       } else if (response.status !== 401) {
         console.error('[Context] Failed to fetch user:', response.status, response.statusText);
       }

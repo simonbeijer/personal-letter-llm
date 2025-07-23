@@ -19,7 +19,7 @@ export async function POST(request) {
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      console.log(`[Auth] Login attempt failed - user not found: ${email}`);
+      console.log('[Auth] Login attempt failed - user not found');
       return NextResponse.json(
         { message: "Invalid credentials" },
         { status: 401 }
@@ -29,7 +29,7 @@ export async function POST(request) {
     const isValid = await bcrypt.compare(password, user.password);
 
     if (!isValid) {
-      console.log(`[Auth] Login attempt failed - invalid password for: ${email}`);
+      console.log('[Auth] Login attempt failed - invalid password');
       return NextResponse.json(
         { message: "Invalid credentials" },
         { status: 401 }
@@ -42,7 +42,7 @@ export async function POST(request) {
       .setExpirationTime("1h")
       .sign(new TextEncoder().encode(SECRET));
 
-    console.log(`[Auth] Login successful for user: ${user.email}`);
+    console.log(`[Auth] Login successful for user: ${user.id}`);
     
     const response = NextResponse.json(
       { message: "User logged in", user: { id: user.id, email: user.email, name: user.name, role: user.role } },

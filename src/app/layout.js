@@ -24,9 +24,6 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
           {children}
-          <footer className="flex justify-center items-center h-10">
-            © 2025 My Site
-          </footer>
           <Analytics />
       </body>
     </html>
