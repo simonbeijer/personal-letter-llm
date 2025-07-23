@@ -1,9 +1,61 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
+import { verifyAuth } from '@/lib/auth';
+import { cookies } from 'next/headers';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+// Simple in-memory rate limiter
+const rateLimitMap = new Map();
+const RATE_LIMIT = 5; // requests per minute per user
+const RATE_WINDOW = 60 * 1000; // 1 minute in milliseconds
+
+function checkRateLimit(userId) {
+  const now = Date.now();
+  const userRequests = rateLimitMap.get(userId) || [];
+  
+  // Remove old requests outside the window
+  const recentRequests = userRequests.filter(time => now - time < RATE_WINDOW);
+  
+  if (recentRequests.length >= RATE_LIMIT) {
+    return false;
+  }
+  
+  // Add current request
+  recentRequests.push(now);
+  rateLimitMap.set(userId, recentRequests);
+  return true;
+}
+
 export async function POST(request) {
+  // Check authentication
+  let user;
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
+    
+    if (!token) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+    
+    user = await verifyAuth(token);
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Invalid or expired authentication' },
+      { status: 401 }
+    );
+  }
+
+  // Check rate limit
+  if (!checkRateLimit(user.id)) {
+    return NextResponse.json(
+      { error: 'Rate limit exceeded. Please wait before making another request.' },
+      { status: 429 }
+    );
+  }
   try {
     const { cv, jobAd, language = 'english' } = await request.json();
 
