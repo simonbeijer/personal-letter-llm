@@ -80,73 +80,158 @@ export async function POST(request) {
       );
     }
 
-    const model = genAI.getGenerativeModel({ 
+    // ===== CHAIN OF THOUGHT IMPLEMENTATION =====
+    
+    // STEP 1: STRATEGIC ANALYSIS - Extract most important job requirements and CV matches
+    const analysisModel = genAI.getGenerativeModel({ 
       model: 'gemini-2.0-flash',
       generationConfig: {
-        maxOutputTokens: 400,
+        maxOutputTokens: 300,
+        temperature: 0.3, // Lower temperature for analysis
+      }
+    });
+
+    const analysisPrompt = `Analyze the match between this CV and job posting. Extract key insights for writing a compelling cover letter.
+
+**CV:** ${cv}
+
+**JOB POSTING:** ${jobAd}
+
+Focus on finding the MOST IMPORTANT information first:
+1. Top 3 specific job requirements from the posting
+2. Best CV examples that demonstrate these requirements (with specific details/numbers)
+3. 1-2 quantifiable achievements from CV that prove value
+4. What makes this candidate uniquely qualified (not generic qualities)
+5. Extract candidate name from CV
+
+Return ONLY a valid JSON object with this structure:
+{
+  "topJobRequirements": ["requirement 1", "requirement 2", "requirement 3"],
+  "matchingExamples": ["specific CV example 1", "specific CV example 2", "specific CV example 3"],
+  "bestAchievements": ["quantifiable achievement 1", "quantifiable achievement 2"],
+  "uniqueQualification": "what makes them special for this specific role",
+  "candidateName": "extract their name from CV",
+  "targetRole": "extract the job title they're applying for"
+}`;
+
+    console.log('🔍 Step 1: Strategic Analysis...');
+    const analysisResult = await analysisModel.generateContent(analysisPrompt);
+    const analysisText = analysisResult.response.text();
+    
+    // Parse JSON response
+    let analysis;
+    try {
+      analysis = JSON.parse(analysisText);
+    } catch (parseError) {
+      // Fallback if JSON parsing fails
+      console.error('JSON parsing failed, using fallback analysis');
+      analysis = {
+        topJobRequirements: ["relevant skills", "experience", "team collaboration"],
+        matchingExamples: ["relevant work experience", "matching technical skills", "proven results"],
+        bestAchievements: ["proven track record", "successful projects"],
+        uniqueQualification: "strong combination of skills and experience",
+        candidateName: "Candidate",
+        targetRole: "the position"
+      };
+    }
+
+    console.log('📊 Strategic Analysis:', analysis);
+
+    // STEP 2: SIMPLE OPENING GENERATION - Hello/Hej format
+    const openingModel = genAI.getGenerativeModel({ 
+      model: 'gemini-2.0-flash',
+      generationConfig: {
+        maxOutputTokens: 100,
+        temperature: 0.6,
+      }
+    });
+
+    const languageStyle = language === 'swedish' 
+      ? 'Swedish starting with "Hej" (simple and direct)'
+      : 'English starting with "Hello" (simple and direct)';
+
+    const openingPrompt = `Create a simple, direct opening for a cover letter using this analysis:
+
+**ANALYSIS:** ${JSON.stringify(analysis, null, 2)}
+
+Requirements for the opening:
+- Start with simple "${language === 'swedish' ? 'Hej' : 'Hello'}" greeting
+- Add candidate's name naturally
+- Mention the specific role they're applying for
+- Brief reason why they're the right fit (most important qualification)
+- Keep it professional but accessible (no jargon)
+- Maximum 2 sentences
+- Language: ${languageStyle}
+
+Example format:
+- English: "Hello! I'm [name] and I'm applying for the [role] position because [main qualification]."
+- Swedish: "Hej! Jag heter [name] och söker tjänsten som [role] eftersom [main qualification]."
+
+Generate ONLY the opening, nothing else.`;
+
+    console.log('👋 Step 2: Simple Opening Generation...');
+    const openingResult = await openingModel.generateContent(openingPrompt);
+    const opening = openingResult.response.text().trim();
+    
+    console.log('✨ Generated Opening:', opening);
+
+    // STEP 3: CUSTOMIZED LETTER ASSEMBLY - Following the 6 guidelines
+    const letterModel = genAI.getGenerativeModel({ 
+      model: 'gemini-2.0-flash',
+      generationConfig: {
+        maxOutputTokens: 300,
         temperature: 0.7,
       }
     });
 
-    const languageInstructions = language === 'swedish' 
-      ? `Generate the cover letter in Swedish. Follow the reference example's direct, personal Swedish style with "Hej!" opening and "Vänliga hälsningar" closing. Use natural Swedish expressions and professional but approachable tone.`
-      : `Generate the cover letter in English. Use professional business letter format with "Dear Hiring Manager" or similar opening and "Sincerely" closing. Maintain professional but personable tone appropriate for international business context.`;
+    const closingStyle = language === 'swedish' 
+      ? '"Jag ser fram emot att höra från er och berätta mer om hur jag kan bidra." + "Vänliga hälsningar"'
+      : '"I look forward to meeting you and having the opportunity to share more about myself." + "Best regards"';
 
-    const prompt = `You are an expert cover letter writer. Create a compelling cover letter that answers "why should they hire me?" 
+    const letterPrompt = `Write a complete cover letter using this opening and analysis:
 
-**APPROACH:**
-1. **Lead with impact** - Start with the most important information. Write a brief and compelling introduction, explaining the job you are applying for and why you are the right fit. This will immediately capture the reader's attention.
-2. **Customize precisely** - Customize your letter for the specific job you are applying to. Include exactly what the employer is looking for, so that your letter addresses their requirements.
-3. **Professional but accessible** - Express yourself professionally, but avoid being overly formal or using industry-specific jargon that may not be understood by everyone. Avoid getting too detailed.
-4. **Show, don't tell** - Provide examples that illustrate your personal qualities. Rather than listing your personal qualities, describing situations that demonstrate them will leave a lasting impression on the reader. You can draw examples from your work, studies, or leisure activities.
-5. **Eliminate clichés** - Avoid using clichés. Instead of generic phrases like "I work well under pressure" or "I'm outgoing", be specific and provide examples of how you work and what kind of person you are.
-6. **End positively** - You can end your letter with a positive statement, such as: "I look forward to meeting you and having the opportunity to share more about myself."
+**OPENING TO USE:** ${opening}
 
-**INPUT MATERIALS:**
-**CV:** ${cv}
-**JOB ADVERTISEMENT:** ${jobAd}
+**STRATEGIC ANALYSIS:** ${JSON.stringify(analysis, null, 2)}
 
-**REFERENCE EXAMPLE:**
-Here's an example of effective cover letter structure and tone:
+**ORIGINAL CV:** ${cv}
 
-"Hej!
-Jag heter Simon och söker en ny utmaning inom webbutveckling – en roll där jag får växa tekniskt, samarbeta i team och bidra till lösningar med samhällsnytta.
+**JOB POSTING:** ${jobAd}
 
-De senaste åren har jag arbetat som frontendutvecklare på Keeros AB med nyutveckling och refaktorering av molnbaserade plattformar. Jag har byggt användarvänliga gränssnitt i Vue.js, integrerat med PHP/MySQL, och jobbat med Figma, Jest, Cypress och teknisk support.
+Structure following the 6 guidelines:
+1. **Opening**: Use the provided opening exactly as written
+2. **Body paragraph**: Show don't tell - Use 2-3 specific examples from analysis that demonstrate qualities (no clichés like "team player" or "work under pressure")
+3. **Closing paragraph**: End with positive statement like ${closingStyle}
 
-Min grund i React kommer från studier och praktik, och jag har vidareutvecklat den genom egna projekt i React/Next.js, där jag bl.a. integrerat LLM-baserade AI-funktioner.
+Requirements:
+- Total length: 140-200 words (concise and focused)
+- Language: ${language}
+- Professional but accessible (no jargon, not overly formal)
+- Customize for this specific job (address their exact requirements)
+- Use specific examples with details/numbers when possible
+- NO CLICHÉS - be specific about how they work and what kind of person they are
+- End positively and professionally
 
-Det som driver mig är att skapa tydliga, lättanvända gränssnitt och skriva genomtänkt kod. Jag trivs i agila team där man delar idéer och samarbetar för att utveckla smarta lösningar. Med mitt öga för användarupplevelse och sinne för detaljer hoppas jag kunna bidra positivt till ert team.
+Generate the complete cover letter now.`;
 
-Jag ser fram emot att höra från er och berätta mer om hur jag kan bidra.
+    console.log('📝 Step 3: Customized Letter Assembly...');
+    const letterResult = await letterModel.generateContent(letterPrompt);
+    const coverLetter = letterResult.response.text();
 
-Vänliga hälsningar,
-Simon Beijer"
+    console.log('✅ Chain of thought generation completed successfully');
 
-Notice: Direct personal opening, specific technical examples, growth narrative, collaboration emphasis, and positive forward-looking close.
-
-**LANGUAGE INSTRUCTIONS:**
-${languageInstructions}
-
-**REQUIREMENTS:**
-- 3 paragraphs, 200-250 words total
-- Professional but personable tone (avoid over-formality and jargon)
-- Include specific achievements with numbers/results when possible
-- Reference the company/role specifically
-- Use active voice and relevant keywords from job posting
-- **NO CLICHÉS**: Avoid generic phrases like "I work well under pressure", "I'm a team player", "I'm detail-oriented"
-- **Use specific examples**: Instead of listing qualities, describe situations that demonstrate them
-- End with positive, forward-looking statement and professional closing
-
-Generate only the final cover letter - no explanations or thinking steps.`;
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const coverLetter = response.text();
-
-    return NextResponse.json({ coverLetter });
+    // Return the result with debug information like your example
+    return NextResponse.json({ 
+      coverLetter,
+      // Optional debug info for development
+      debug: {
+        analysis,
+        opening,
+        steps: ['Strategic Analysis', 'Simple Opening Generation', 'Customized Letter Assembly']
+      }
+    });
   } catch (error) {
-    console.error('Error generating cover letter:', error);
+    console.error('Error in chain of thought generation:', error);
     
     const status = error.message?.includes('rate') || error.message?.includes('quota') ? 429 : 500;
     const message = status === 429 
