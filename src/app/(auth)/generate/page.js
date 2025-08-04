@@ -204,7 +204,7 @@ export default function Generate() {
             <CustomButton
               text={
                 <div className="flex items-center justify-center gap-2">
-                  <SparklesIcon className="h-4 w-4" />
+                  <SparklesIcon className="h-4 w-4 text-yellow-500" />
                   {isGenerating ? "Generating..." : "Generate Cover Letter"}
                 </div>
               }
@@ -233,11 +233,6 @@ export default function Generate() {
                       </div>
                       <div className="space-y-2">
                         <p className="text-gray-700 font-medium">Generating your personalized cover letter...</p>
-                        <div className="flex justify-center space-x-1">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{animationDelay: '0s'}}></div>
-                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                        </div>
                         <p className="text-sm text-gray-500 mt-3">This may take 10-30 seconds</p>
                       </div>
                     </div>
@@ -278,7 +273,7 @@ export default function Generate() {
                       </div>
                     }
                     callBack={generateCoverLetter}
-                    disabled={cvCharCount < minCharLength || jobAdCharCount < minCharLength || isGenerating}
+                    disabled={cvCharCount < minCharLength || jobAdCharCount < minCharLength || isGenerating || !coverLetter}
                     variant="outline"
                     size="sm"
                   />

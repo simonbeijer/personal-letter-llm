@@ -61,8 +61,8 @@ export default function Dashboard() {
             <CustomButton
               text={
                 <div className="flex items-center justify-center gap-2">
-                  <SparklesIcon className="h-4 w-4" />
-                  Generate Letter
+                  <SparklesIcon className="h-4 w-4 text-yellow-500" />
+                  Generate Cover Letter
                 </div>
               }
               callBack={navigateToGenerate}

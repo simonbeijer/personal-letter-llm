@@ -91,27 +91,40 @@ export async function POST(request) {
       }
     });
 
-    const analysisPrompt = `Analyze the match between this CV and job posting. Extract key insights for writing a compelling cover letter.
+    const analysisPrompt = `Analyze the match between this CV and job posting. Extract CONCRETE, SPECIFIC information for a compelling cover letter.
 
 **CV:** ${cv}
 
 **JOB POSTING:** ${jobAd}
 
-Focus on finding the MOST IMPORTANT information first:
-1. Top 3 specific job requirements from the posting
-2. Best CV examples that demonstrate these requirements (with specific details/numbers)
-3. 1-2 quantifiable achievements from CV that prove value
-4. What makes this candidate uniquely qualified (not generic qualities)
-5. Extract candidate name from CV
+CRITICAL: Focus on CONCRETE, MEASURABLE information:
 
-Return ONLY a valid JSON object with this structure:
+1. **Name Extraction**: Look for person's name in various formats:
+   - "Name: John Smith" or "John Smith" at top
+   - Email signatures like "john.smith@email.com" 
+   - Contact sections, headers, or introductions
+   - If unclear, look for "I am [name]" or similar patterns
+
+2. **Job Requirements**: Extract 3 SPECIFIC technical/role requirements (not generic skills)
+
+3. **Concrete Achievements**: Find CV examples WITH NUMBERS/METRICS:
+   - "increased sales by X%", "managed team of X people", "reduced costs by X"
+   - "built X systems", "improved X by Y%", "delivered X projects"
+   - NO generic phrases like "strong experience" or "good skills"
+
+4. **Unique Hook**: ONE specific, measurable achievement most relevant to this job
+   - Must include numbers, concrete results, or specific technologies
+   - FORBIDDEN: "strong combination", "well-suited", "proven track record"
+   - REQUIRED: Specific accomplishment with measurable impact
+
+Return ONLY a valid JSON object:
 {
-  "topJobRequirements": ["requirement 1", "requirement 2", "requirement 3"],
-  "matchingExamples": ["specific CV example 1", "specific CV example 2", "specific CV example 3"],
-  "bestAchievements": ["quantifiable achievement 1", "quantifiable achievement 2"],
-  "uniqueQualification": "what makes them special for this specific role",
-  "candidateName": "extract their name from CV",
-  "targetRole": "extract the job title they're applying for"
+  "topJobRequirements": ["specific requirement 1", "specific requirement 2", "specific requirement 3"],
+  "matchingExamples": ["concrete example with details", "another specific example", "third specific example"],
+  "bestAchievements": ["achievement with numbers", "another measurable result"],
+  "uniqueHook": "ONE specific achievement with numbers/metrics most relevant to this job",
+  "candidateName": "actual name extracted from CV or 'Unknown' if not found",
+  "targetRole": "exact job title from posting"
 }`;
 
     console.log('🔍 Step 1: Strategic Analysis...');
@@ -122,16 +135,29 @@ Return ONLY a valid JSON object with this structure:
     let analysis;
     try {
       analysis = JSON.parse(analysisText);
+      
+      // Validate that we got concrete information
+      if (!analysis.candidateName || analysis.candidateName === 'Unknown') {
+        console.warn('Name extraction failed, using better fallback');
+        analysis.candidateName = 'the applicant'; // More natural than "Candidate"
+      }
+      
+      // Ensure uniqueHook is concrete
+      if (!analysis.uniqueHook || analysis.uniqueHook.includes('strong combination') || analysis.uniqueHook.includes('well-suited')) {
+        console.warn('uniqueHook too generic, using better fallback');
+        analysis.uniqueHook = 'proven experience in relevant technology and successful project delivery';
+      }
+      
     } catch (parseError) {
-      // Fallback if JSON parsing fails
-      console.error('JSON parsing failed, using fallback analysis');
+      // Better fallback if JSON parsing fails
+      console.error('JSON parsing failed, using concrete fallback analysis');
       analysis = {
-        topJobRequirements: ["relevant skills", "experience", "team collaboration"],
-        matchingExamples: ["relevant work experience", "matching technical skills", "proven results"],
-        bestAchievements: ["proven track record", "successful projects"],
-        uniqueQualification: "strong combination of skills and experience",
-        candidateName: "Candidate",
-        targetRole: "the position"
+        topJobRequirements: ["technical proficiency", "project experience", "problem-solving ability"],
+        matchingExamples: ["hands-on technical experience", "successful project delivery", "relevant industry knowledge"],
+        bestAchievements: ["delivered successful projects", "gained valuable experience"],
+        uniqueHook: "proven ability to deliver results in technical projects",
+        candidateName: "the applicant",
+        targetRole: "this role"
       };
     }
 
@@ -150,28 +176,59 @@ Return ONLY a valid JSON object with this structure:
       ? 'Swedish starting with "Hej" (simple and direct)'
       : 'English starting with "Hello" (simple and direct)';
 
-    const openingPrompt = `Create a simple, direct opening for a cover letter using this analysis:
+    const openingPrompt = `Create a natural, conversational opening that avoids corporate speak using this analysis:
 
 **ANALYSIS:** ${JSON.stringify(analysis, null, 2)}
 
-Requirements for the opening:
-- Start with simple "${language === 'swedish' ? 'Hej' : 'Hello'}" greeting
-- Add candidate's name naturally
-- Mention the specific role they're applying for
-- Brief reason why they're the right fit (most important qualification)
-- Keep it professional but accessible (no jargon)
+STRICT REQUIREMENTS:
+- Start with "${language === 'swedish' ? 'Hej' : 'Hello'}" greeting
+- Use candidate name or "I'm" if name unclear  
+- Express genuine interest/excitement about the specific role
+- Include the concrete achievement from uniqueHook (with specifics/numbers if available)
+- Sound natural and conversational, NOT corporate
 - Maximum 2 sentences
 - Language: ${languageStyle}
 
-Example format:
-- English: "Hello! I'm [name] and I'm applying for the [role] position because [main qualification]."
-- Swedish: "Hej! Jag heter [name] och söker tjänsten som [role] eftersom [main qualification]."
+FORBIDDEN PHRASES (will be rejected):
+- "strong combination of skills"
+- "aligns well with requirements" 
+- "proven track record"
+- "well-suited for"
+- "applying for the position"
+
+GOOD EXAMPLES:
+- English: "Hello! I'm Sarah, and I'm excited about the Frontend Developer role because I built interfaces that increased user engagement by 40%."
+- Swedish: "Hej! Jag heter Erik och är intresserad av utvecklartjänsten eftersom jag har ökat försäljningen med 25% genom e-handelslösningar."
+
+Use "excited about" or "interested in" instead of "applying for".
+Focus on ONE concrete achievement that matters for THIS job.
 
 Generate ONLY the opening, nothing else.`;
 
     console.log('👋 Step 2: Simple Opening Generation...');
     const openingResult = await openingModel.generateContent(openingPrompt);
-    const opening = openingResult.response.text().trim();
+    let opening = openingResult.response.text().trim();
+    
+    // Validate opening doesn't contain forbidden phrases
+    const forbiddenPhrases = [
+      'strong combination', 'aligns well', 'proven track record', 
+      'well-suited', 'applying for the position', 'skills and experience'
+    ];
+    
+    const containsForbidden = forbiddenPhrases.some(phrase => 
+      opening.toLowerCase().includes(phrase.toLowerCase())
+    );
+    
+    if (containsForbidden) {
+      console.warn('Opening contains corporate speak, using fallback');
+      if (language === 'swedish') {
+        const name = analysis.candidateName !== 'the applicant' ? `Jag heter ${analysis.candidateName} och` : 'Jag';
+        opening = `Hej! ${name} är intresserad av ${analysis.targetRole}.`;
+      } else {
+        const name = analysis.candidateName !== 'the applicant' ? `I'm ${analysis.candidateName}, and I'm` : "I'm";
+        opening = `Hello! ${name} excited about the ${analysis.targetRole} role.`;
+      }
+    }
     
     console.log('✨ Generated Opening:', opening);
 
@@ -188,29 +245,38 @@ Generate ONLY the opening, nothing else.`;
       ? '"Jag ser fram emot att höra från er och berätta mer om hur jag kan bidra." + "Vänliga hälsningar"'
       : '"I look forward to meeting you and having the opportunity to share more about myself." + "Best regards"';
 
-    const letterPrompt = `Write a complete cover letter using this opening and analysis:
+    const letterPrompt = `Write a complete, natural cover letter using this opening and analysis:
 
-**OPENING TO USE:** ${opening}
+**OPENING TO USE EXACTLY:** ${opening}
 
 **STRATEGIC ANALYSIS:** ${JSON.stringify(analysis, null, 2)}
 
-**ORIGINAL CV:** ${cv}
-
-**JOB POSTING:** ${jobAd}
-
 Structure following the 6 guidelines:
-1. **Opening**: Use the provided opening exactly as written
-2. **Body paragraph**: Show don't tell - Use 2-3 specific examples from analysis that demonstrate qualities (no clichés like "team player" or "work under pressure")
-3. **Closing paragraph**: End with positive statement like ${closingStyle}
+1. **Opening**: Use the provided opening EXACTLY as written
+2. **Body paragraph**: Use 2-3 concrete examples from matchingExamples and bestAchievements 
+   - Show specific results with numbers when available
+   - Demonstrate qualities through actions, not generic claims
+   - Address the topJobRequirements specifically
+3. **Closing**: End with positive statement like ${closingStyle}
 
-Requirements:
+CRITICAL REQUIREMENTS:
 - Total length: 140-200 words (concise and focused)
 - Language: ${language}
-- Professional but accessible (no jargon, not overly formal)
-- Customize for this specific job (address their exact requirements)
-- Use specific examples with details/numbers when possible
-- NO CLICHÉS - be specific about how they work and what kind of person they are
-- End positively and professionally
+- Sound conversational and natural, NOT corporate
+- Use concrete examples with specific details/numbers
+- Address their exact job requirements from analysis
+
+ABSOLUTELY FORBIDDEN PHRASES:
+- "team player", "work under pressure", "detail-oriented"
+- "strong combination", "proven track record", "well-suited"
+- "extensive experience", "passion for", "dedicated to"
+- Generic claims without specific examples
+
+FOCUS ON:
+- Specific technologies, tools, or methods used
+- Measurable results and achievements  
+- Concrete examples of problem-solving
+- Natural, conversational tone throughout
 
 Generate the complete cover letter now.`;
 
