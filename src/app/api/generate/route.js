@@ -7,28 +7,24 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Simple in-memory rate limiter
 const rateLimitMap = new Map();
-const RATE_LIMIT = 5; // requests per minute per user
-const RATE_WINDOW = 60 * 1000; // 1 minute in milliseconds
+const RATE_LIMIT = 5;
+const RATE_WINDOW = 60 * 1000;
 
 function checkRateLimit(userId) {
   const now = Date.now();
   const userRequests = rateLimitMap.get(userId) || [];
-  
-  // Remove old requests outside the window
   const recentRequests = userRequests.filter(time => now - time < RATE_WINDOW);
   
   if (recentRequests.length >= RATE_LIMIT) {
     return false;
   }
   
-  // Add current request
   recentRequests.push(now);
   rateLimitMap.set(userId, recentRequests);
   return true;
 }
 
 export async function POST(request) {
-  // Check authentication
   let user;
   try {
     const cookieStore = await cookies();
@@ -49,16 +45,17 @@ export async function POST(request) {
     );
   }
 
-  // Check rate limit
   if (!checkRateLimit(user.id)) {
     return NextResponse.json(
       { error: 'Rate limit exceeded. Please wait before making another request.' },
       { status: 429 }
     );
   }
+
   try {
     const { cv, jobAd, language = 'english' } = await request.json();
 
+    // Validation
     if (!cv || !jobAd) {
       return NextResponse.json(
         { error: 'CV and job advertisement are required' },
@@ -73,237 +70,109 @@ export async function POST(request) {
       );
     }
 
-    if (language && !['english', 'swedish'].includes(language)) {
+    if (!['english', 'swedish'].includes(language)) {
       return NextResponse.json(
         { error: 'Language must be either "english" or "swedish"' },
         { status: 400 }
       );
     }
 
-    // ===== CHAIN OF THOUGHT IMPLEMENTATION =====
-    
-    // STEP 1: STRATEGIC ANALYSIS - Extract most important job requirements and CV matches
-    const analysisModel = genAI.getGenerativeModel({ 
+    // ONE AI CALL - That's it!
+    const model = genAI.getGenerativeModel({ 
       model: 'gemini-2.0-flash',
       generationConfig: {
-        maxOutputTokens: 300,
-        temperature: 0.3, // Lower temperature for analysis
-      }
-    });
-
-    const analysisPrompt = `Analyze the match between this CV and job posting. Extract CONCRETE, SPECIFIC information for a compelling cover letter.
-
-**CV:** ${cv}
-
-**JOB POSTING:** ${jobAd}
-
-CRITICAL: Focus on CONCRETE, MEASURABLE information:
-
-1. **Name Extraction**: Look for person's name in various formats:
-   - "Name: John Smith" or "John Smith" at top
-   - Email signatures like "john.smith@email.com" 
-   - Contact sections, headers, or introductions
-   - If unclear, look for "I am [name]" or similar patterns
-
-2. **Job Requirements**: Extract 3 SPECIFIC technical/role requirements (not generic skills)
-
-3. **Concrete Achievements**: Find CV examples WITH NUMBERS/METRICS:
-   - "increased sales by X%", "managed team of X people", "reduced costs by X"
-   - "built X systems", "improved X by Y%", "delivered X projects"
-   - NO generic phrases like "strong experience" or "good skills"
-
-4. **Unique Hook**: ONE specific, measurable achievement most relevant to this job
-   - Must include numbers, concrete results, or specific technologies
-   - FORBIDDEN: "strong combination", "well-suited", "proven track record"
-   - REQUIRED: Specific accomplishment with measurable impact
-
-Return ONLY a valid JSON object:
-{
-  "topJobRequirements": ["specific requirement 1", "specific requirement 2", "specific requirement 3"],
-  "matchingExamples": ["concrete example with details", "another specific example", "third specific example"],
-  "bestAchievements": ["achievement with numbers", "another measurable result"],
-  "uniqueHook": "ONE specific achievement with numbers/metrics most relevant to this job",
-  "candidateName": "actual name extracted from CV or 'Unknown' if not found",
-  "targetRole": "exact job title from posting"
-}`;
-
-    console.log('🔍 Step 1: Strategic Analysis...');
-    const analysisResult = await analysisModel.generateContent(analysisPrompt);
-    const analysisText = analysisResult.response.text();
-    
-    // Parse JSON response
-    let analysis;
-    try {
-      analysis = JSON.parse(analysisText);
-      
-      // Validate that we got concrete information
-      if (!analysis.candidateName || analysis.candidateName === 'Unknown') {
-        console.warn('Name extraction failed, using better fallback');
-        analysis.candidateName = 'the applicant'; // More natural than "Candidate"
-      }
-      
-      // Ensure uniqueHook is concrete
-      if (!analysis.uniqueHook || analysis.uniqueHook.includes('strong combination') || analysis.uniqueHook.includes('well-suited')) {
-        console.warn('uniqueHook too generic, using better fallback');
-        analysis.uniqueHook = 'proven experience in relevant technology and successful project delivery';
-      }
-      
-    } catch (parseError) {
-      // Better fallback if JSON parsing fails
-      console.error('JSON parsing failed, using concrete fallback analysis');
-      analysis = {
-        topJobRequirements: ["technical proficiency", "project experience", "problem-solving ability"],
-        matchingExamples: ["hands-on technical experience", "successful project delivery", "relevant industry knowledge"],
-        bestAchievements: ["delivered successful projects", "gained valuable experience"],
-        uniqueHook: "proven ability to deliver results in technical projects",
-        candidateName: "the applicant",
-        targetRole: "this role"
-      };
-    }
-
-    console.log('📊 Strategic Analysis:', analysis);
-
-    // STEP 2: SIMPLE OPENING GENERATION - Hello/Hej format
-    const openingModel = genAI.getGenerativeModel({ 
-      model: 'gemini-2.0-flash',
-      generationConfig: {
-        maxOutputTokens: 100,
-        temperature: 0.6,
-      }
-    });
-
-    const languageStyle = language === 'swedish' 
-      ? 'Swedish starting with "Hej" (simple and direct)'
-      : 'English starting with "Hello" (simple and direct)';
-
-    const openingPrompt = `Create a natural, conversational opening that avoids corporate speak using this analysis:
-
-**ANALYSIS:** ${JSON.stringify(analysis, null, 2)}
-
-STRICT REQUIREMENTS:
-- Start with "${language === 'swedish' ? 'Hej' : 'Hello'}" greeting
-- Use candidate name or "I'm" if name unclear  
-- Express genuine interest/excitement about the specific role
-- Include the concrete achievement from uniqueHook (with specifics/numbers if available)
-- Sound natural and conversational, NOT corporate
-- Maximum 2 sentences
-- Language: ${languageStyle}
-
-FORBIDDEN PHRASES (will be rejected):
-- "strong combination of skills"
-- "aligns well with requirements" 
-- "proven track record"
-- "well-suited for"
-- "applying for the position"
-
-GOOD EXAMPLES:
-- English: "Hello! I'm Sarah, and I'm excited about the Frontend Developer role because I built interfaces that increased user engagement by 40%."
-- Swedish: "Hej! Jag heter Erik och är intresserad av utvecklartjänsten eftersom jag har ökat försäljningen med 25% genom e-handelslösningar."
-
-Use "excited about" or "interested in" instead of "applying for".
-Focus on ONE concrete achievement that matters for THIS job.
-
-Generate ONLY the opening, nothing else.`;
-
-    console.log('👋 Step 2: Simple Opening Generation...');
-    const openingResult = await openingModel.generateContent(openingPrompt);
-    let opening = openingResult.response.text().trim();
-    
-    // Validate opening doesn't contain forbidden phrases
-    const forbiddenPhrases = [
-      'strong combination', 'aligns well', 'proven track record', 
-      'well-suited', 'applying for the position', 'skills and experience'
-    ];
-    
-    const containsForbidden = forbiddenPhrases.some(phrase => 
-      opening.toLowerCase().includes(phrase.toLowerCase())
-    );
-    
-    if (containsForbidden) {
-      console.warn('Opening contains corporate speak, using fallback');
-      if (language === 'swedish') {
-        const name = analysis.candidateName !== 'the applicant' ? `Jag heter ${analysis.candidateName} och` : 'Jag';
-        opening = `Hej! ${name} är intresserad av ${analysis.targetRole}.`;
-      } else {
-        const name = analysis.candidateName !== 'the applicant' ? `I'm ${analysis.candidateName}, and I'm` : "I'm";
-        opening = `Hello! ${name} excited about the ${analysis.targetRole} role.`;
-      }
-    }
-    
-    console.log('✨ Generated Opening:', opening);
-
-    // STEP 3: CUSTOMIZED LETTER ASSEMBLY - Following the 6 guidelines
-    const letterModel = genAI.getGenerativeModel({ 
-      model: 'gemini-2.0-flash',
-      generationConfig: {
-        maxOutputTokens: 300,
+        maxOutputTokens: 500,
         temperature: 0.7,
       }
     });
 
-    const closingStyle = language === 'swedish' 
-      ? '"Jag ser fram emot att höra från er och berätta mer om hur jag kan bidra." + "Vänliga hälsningar"'
-      : '"I look forward to meeting you and having the opportunity to share more about myself." + "Best regards"';
+    const prompt = `You are a professional cover letter writer. Write a personalized cover letter in ${language}.
 
-    const letterPrompt = `Write a complete, natural cover letter using this opening and analysis:
+**CANDIDATE'S CV:**
+${cv}
 
-**OPENING TO USE EXACTLY:** ${opening}
+**JOB POSTING:**
+${jobAd}
 
-**STRATEGIC ANALYSIS:** ${JSON.stringify(analysis, null, 2)}
+**INSTRUCTIONS:**
 
-Structure following the 6 guidelines:
-1. **Opening**: Use the provided opening EXACTLY as written
-2. **Body paragraph**: Use 2-3 concrete examples from matchingExamples and bestAchievements 
-   - Show specific results with numbers when available
-   - Demonstrate qualities through actions, not generic claims
-   - Address the topJobRequirements specifically
-3. **Closing**: End with positive statement like ${closingStyle}
+Write a cover letter that is:
+- 150-250 words total
+- Written in ${language}
+- Natural and conversational (NOT corporate or robotic)
+- Specific to THIS job and THIS candidate
 
-CRITICAL REQUIREMENTS:
-- Total length: 140-200 words (concise and focused)
-- Language: ${language}
-- Sound conversational and natural, NOT corporate
-- Use concrete examples with specific details/numbers
-- Address their exact job requirements from analysis
+**STRUCTURE:**
 
-ABSOLUTELY FORBIDDEN PHRASES:
-- "team player", "work under pressure", "detail-oriented"
-- "strong combination", "proven track record", "well-suited"
-- "extensive experience", "passion for", "dedicated to"
-- Generic claims without specific examples
+1. **Opening** (1-2 sentences):
+   ${language === 'swedish' 
+     ? '- Start with "Hej!" or "Hej [hiring manager name if visible]!"'
+     : '- Start with "Hello!" or "Dear [hiring manager name if visible],"'
+   }
+   - Mention the specific job title
+   - Include ONE impressive achievement from the CV with numbers/specifics
 
-FOCUS ON:
-- Specific technologies, tools, or methods used
-- Measurable results and achievements  
-- Concrete examples of problem-solving
-- Natural, conversational tone throughout
+2. **Body** (2-3 sentences):
+   - Pick 2-3 CONCRETE examples from the CV that match job requirements
+   - Use specific numbers, technologies, or results (e.g., "built a React platform with 50,000 users")
+   - Connect these examples to what the job needs
+   - NO generic phrases like "team player" or "strong skills"
 
-Generate the complete cover letter now.`;
+3. **Closing** (1-2 sentences):
+   ${language === 'swedish'
+     ? '- Express interest in discussing further\n   - End with "Vänliga hälsningar" or "Med vänlig hälsning"'
+     : '- Express interest in discussing further\n   - End with "Best regards" or "Kind regards"'
+   }
 
-    console.log('📝 Step 3: Customized Letter Assembly...');
-    const letterResult = await letterModel.generateContent(letterPrompt);
-    const coverLetter = letterResult.response.text();
+**CRITICAL RULES:**
 
-    console.log('✅ Chain of thought generation completed successfully');
+✅ DO:
+- Use ONLY information from the CV provided (don't invent facts)
+- Include specific numbers, percentages, or metrics if they're in the CV
+- Mention actual companies, technologies, and tools from the CV
+- Make it feel like a real person wrote it
 
-    // Return the result with debug information like your example
+❌ DON'T:
+- Invent achievements, companies, or technologies not in the CV
+- Use clichés: "passion for", "team player", "detail-oriented", "proven track record"
+- Be overly formal or robotic
+- Make generic claims without backing them up
+
+**EXAMPLE GOOD OPENING (Swedish):**
+"Hej! Jag är intresserad av fullstackrollen på CodeFlow eftersom jag har byggt en React e-handelsplattform med över 50 000 aktiva användare på Techlify."
+
+**EXAMPLE GOOD OPENING (English):**
+"Hello! I'm excited about the Full Stack Developer position because I've built a React e-commerce platform serving over 50,000 active users."
+
+Write the complete cover letter now:`;
+
+    console.log('📝 Generating cover letter...');
+    const result = await model.generateContent(prompt);
+    const coverLetter = result.response.text().trim();
+    
+    console.log('✅ Cover letter generated');
+    console.log('📊 Length:', coverLetter.length, 'characters');
+
     return NextResponse.json({ 
       coverLetter,
-      // Optional debug info for development
-      debug: {
-        analysis,
-        opening,
-        steps: ['Strategic Analysis', 'Simple Opening Generation', 'Customized Letter Assembly']
+      metadata: {
+        language,
+        length: coverLetter.length,
+        model: 'gemini-2.0-flash'
       }
     });
+
   } catch (error) {
-    console.error('Error in chain of thought generation:', error);
+    console.error('❌ Error:', error);
     
     const status = error.message?.includes('rate') || error.message?.includes('quota') ? 429 : 500;
     const message = status === 429 
       ? 'Rate limit exceeded. Please try again later.'
       : 'Failed to generate cover letter. Please try again.';
     
-    return NextResponse.json({ error: message }, { status });
+    return NextResponse.json({ 
+      error: message,
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    }, { status });
   }
 }
